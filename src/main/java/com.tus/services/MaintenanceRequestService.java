@@ -34,7 +34,7 @@ public class MaintenanceRequestService {
 
         return results.stream()
                 .map(r -> new MaintenanceRequestSummaryDto(
-                        r.getId(), r.getStatus(), r.getPriority(), r.getUnit(), r.getCreatedAt()
+                        r.getId(), r.getCreatedOn(), r.getTask(), r.getStatus(), r.getPriority(), r.getUnit()
                 ))
                 .toList();
     }

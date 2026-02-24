@@ -18,10 +18,11 @@ function loadTable() {
             dataSrc: ""
         },
         columns: [
+            { data: "createdOn" },
+            {data: "task"},
             { data: "status" },
             { data: "priority" },
-            { data: "unit" },
-            { data: "createdAt" }
+            { data: "unit" }
         ]
     });
 }
