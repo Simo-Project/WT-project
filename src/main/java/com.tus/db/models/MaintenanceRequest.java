@@ -48,7 +48,7 @@ public class MaintenanceRequest {
     public void onCreate() {
         if (this.status == null) this.status = RequestStatus.NEW;
         if (this.priority == null) this.priority = Priority.MEDIUM;
-        this.createdOn = LocalDate.now();
+        if (this.createdOn == null) this.createdOn = LocalDate.now();
     }
 
     public Long getId() { return id; }
