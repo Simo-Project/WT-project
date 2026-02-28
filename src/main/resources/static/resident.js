@@ -1,7 +1,6 @@
 let myTable;
 
 function showMessage(type, text) {
-    // type: success | danger | warning | info
     const html = `<div class="alert alert-${type}" role="alert">${text}</div>`;
     document.getElementById("messageArea").innerHTML = html;
 }
@@ -39,7 +38,6 @@ async function submitRequest(payload) {
     try {
         errBody = await res.json();
     } catch (e) {
-        // ignore
     }
     return { ok: false, status: res.status, error: errBody };
 }
@@ -66,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Validation errors (400)
         if (result.status === 400 && result.error && result.error.errors) {
             const errors = result.error.errors;
             const msg = Object.keys(errors)
@@ -76,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Forbidden/unauthorised
         if (result.status === 401 || result.status === 403) {
             showMessage("danger", "You are not authorised. Please log in as a resident.");
             return;

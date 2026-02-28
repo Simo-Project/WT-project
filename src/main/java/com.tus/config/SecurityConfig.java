@@ -18,8 +18,9 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index.html", "/login", "/error",
-                        "/styles.css", "/script.js").permitAll()
+                .requestMatchers("/", "/index.html", "/login", "/login.html", "/error",
+                        "/styles.css", "/utils.js", "/routes.js",
+                        "/views/**","/script.js").permitAll()
 
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/requests/**").hasRole("RESIDENT")
@@ -27,8 +28,14 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
 
-        http.formLogin(form -> form.defaultSuccessUrl("/", true));
-        http.logout(logout -> logout.logoutSuccessUrl("/login?logout"));
+        http.formLogin(form -> form
+                .loginPage("/login.html")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+        );
+
+        http.logout(logout -> logout.logoutSuccessUrl("/login.html?logout"));
 
         return http.build();
     }

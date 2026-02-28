@@ -12,14 +12,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Returns clear validation errors for DTO validation failures.
-     * Example response:
-     * {
-     *   "message": "Validation failed",
-     *   "errors": { "title": "Title is required", "description": "Description is required" }
-     * }
-     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, Object> handleValidation(MethodArgumentNotValidException ex) {

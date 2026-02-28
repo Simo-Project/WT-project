@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public class CreateMaintenanceRequestDto {
 
     @NotBlank(message = "Title is required")
-    private String title; // maps to entity.task
+    private String title;
 
     @NotNull(message = "Category is required")
     private RequestCategory category;

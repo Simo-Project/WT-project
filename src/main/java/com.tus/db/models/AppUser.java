@@ -20,7 +20,6 @@ public class AppUser {
     @Column(nullable = false)
     private UserRole role;
 
-    // For residents (admin can be null)
     @Column
     private String unit;
 

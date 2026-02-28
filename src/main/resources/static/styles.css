@@ -27,5 +27,5 @@ tr:nth-child(even) {
 }
 
 table.dataTable {
-    width: 100% !important; /* Force table to fill container width */
+    width: 100% !important;
 }
