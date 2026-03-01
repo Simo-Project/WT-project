@@ -4,6 +4,7 @@ import com.tus.db.models.MaintenanceRequest;
 import com.tus.db.models.Priority;
 import com.tus.db.models.RequestStatus;
 import com.tus.db.repos.MaintenanceRequestRepository;
+import com.tus.db.models.RequestCategory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,6 @@ class AdminRequestsRestAssuredIT {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = port;
 
-        // Seed a few rows for the test (no mocks)
         repo.deleteAll();
 
         repo.save(make("Replace smoke detector", RequestStatus.NEW, Priority.HIGH, "Apt 12", LocalDate.of(2026, 2, 10)));
@@ -45,6 +45,8 @@ class AdminRequestsRestAssuredIT {
     private MaintenanceRequest make(String task, RequestStatus status, Priority priority, String unit, LocalDate createdOn) {
         MaintenanceRequest mr = new MaintenanceRequest();
         mr.setTask(task);
+        mr.setCategory(RequestCategory.OTHER);
+        mr.setDescription("Test description");
         mr.setStatus(status);
         mr.setPriority(priority);
         mr.setUnit(unit);
@@ -53,7 +55,6 @@ class AdminRequestsRestAssuredIT {
     }
 
     private Map<String, String> loginAsAdmin() {
-        // Form login sets a JSESSIONID cookie. We capture it and reuse it.
         return given()
                 .redirects().follow(false)
                 .contentType(ContentType.URLENC)

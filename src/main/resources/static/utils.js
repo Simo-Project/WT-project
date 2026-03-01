@@ -36,7 +36,8 @@ async function apiPost(url, bodyObj) {
 async function loadView(htmlPath, jsPath) {
     const res = await fetch(htmlPath);
     if (!res.ok) {
-        document.getElementById("mainView").innerHTML = `<div class="alert alert-danger">View not found: ${htmlPath}</div>`;
+        document.getElementById("mainView").innerHTML =
+            `<div class="alert alert-danger">View not found: ${htmlPath}</div>`;
         return;
     }
 
@@ -44,14 +45,19 @@ async function loadView(htmlPath, jsPath) {
     document.getElementById("mainView").innerHTML = html;
 
     if (jsPath) {
-        // remove old view script if present
         const old = document.getElementById("viewScript");
         if (old) old.remove();
 
         const s = document.createElement("script");
         s.id = "viewScript";
         s.src = jsPath + "?v=" + Date.now();
-        document.body.appendChild(s);
+
+        // IMPORTANT: wait until the script loads (so event listeners are attached)
+        await new Promise((resolve, reject) => {
+            s.onload = resolve;
+            s.onerror = () => reject(new Error("Failed to load view script: " + jsPath));
+            document.body.appendChild(s);
+        });
     }
 }
 
