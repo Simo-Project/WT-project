@@ -33,6 +33,32 @@ async function apiPost(url, bodyObj) {
     return data ?? text;
 }
 
+async function apiPatch(url, bodyObj) {
+    const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyObj),
+        credentials: "same-origin"
+    });
+
+    const contentType = res.headers.get("content-type") || "";
+    let data = null;
+    let text = null;
+
+    if (contentType.includes("application/json")) data = await res.json();
+    else text = await res.text();
+
+    if (!res.ok) {
+        const err = new Error("Request failed");
+        err.status = res.status;
+        err.data = data;
+        err.text = text;
+        throw err;
+    }
+
+    return data ?? text;
+}
+
 async function loadView(htmlPath, jsPath) {
     const res = await fetch(htmlPath);
     if (!res.ok) {

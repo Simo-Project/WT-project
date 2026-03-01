@@ -5,7 +5,9 @@ import com.tus.db.models.Priority;
 import com.tus.db.models.RequestStatus;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import com.tus.dtos.MaintenanceRequestSummaryDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,23 @@ public class MaintenanceRequestService {
                         r.getId(), r.getCreatedOn(), r.getTask(), r.getStatus(), r.getPriority(), r.getUnit()
                 ))
                 .toList();
+    }
+
+    public MaintenanceRequestSummaryDto updateStatus(Long id, RequestStatus newStatus) {
+        MaintenanceRequest r = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+
+        r.setStatus(newStatus);
+        MaintenanceRequest saved = repo.save(r);
+
+        return new MaintenanceRequestSummaryDto(
+                saved.getId(),
+                saved.getCreatedOn(),
+                saved.getTask(),
+                saved.getStatus(),
+                saved.getPriority(),
+                saved.getUnit()
+        );
     }
 }
 
