@@ -2,6 +2,7 @@ package com.tus.services;
 
 import com.tus.db.models.MaintenanceRequest;
 import com.tus.db.models.Priority;
+import com.tus.db.models.RequestCategory;
 import com.tus.db.models.RequestStatus;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import com.tus.dtos.MaintenanceRequestSummaryDto;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,26 +25,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class MaintenanceRequestServiceIntegrationTest {
 
     @Autowired
-    private MaintenanceRequestRepository repository;
+    private MaintenanceRequestRepository repo;
 
     @Autowired
     private MaintenanceRequestService service;
 
     @BeforeEach
     void setUp() {
-        repository.deleteAll();
+        repo.deleteAll();
 
-        repository.save(make("Replace smoke detector", RequestStatus.NEW,         Priority.HIGH,   "Apt 12"));
-        repository.save(make("Fix broken air vent",  RequestStatus.IN_PROGRESS, Priority.MEDIUM, "Apt 3"));
-        repository.save(make("Paint",                RequestStatus.CLOSED,      Priority.LOW,    "Apt 8"));
+        repo.save(make("Replace smoke detector", RequestStatus.NEW, Priority.HIGH, "Apt 12", LocalDate.of(2026, 2, 10)));
+        repo.save(make("Fix broken air vent", RequestStatus.IN_PROGRESS, Priority.MEDIUM, "Apt 3", LocalDate.of(2026, 2, 9)));
+        repo.save(make("Paint", RequestStatus.CLOSED, Priority.LOW, "Apt 8", LocalDate.of(2026, 2, 8)));
     }
 
-    private MaintenanceRequest make(String task, RequestStatus status, Priority priority, String unit) {
+    private MaintenanceRequest make(String task, RequestStatus status, Priority priority, String unit, LocalDate createdOn) {
         MaintenanceRequest mr = new MaintenanceRequest();
         mr.setTask(task);
+        mr.setCategory(RequestCategory.OTHER);
+        mr.setDescription("Test description");
         mr.setStatus(status);
         mr.setPriority(priority);
         mr.setUnit(unit);
+        mr.setCreatedOn(createdOn);
         return mr;
     }
 
