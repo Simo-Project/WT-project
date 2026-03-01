@@ -14,6 +14,11 @@ function initRoutes(user) {
         await loadView("/views/resident/my-requests.html", "/views/resident/my-requests.js");
     });
 
+    router.on("/resident/requests/:id", async (match) => {
+        window.routeParams = match.data;
+        await loadView("/views/resident/request-details.html", "/views/resident/request-details.js");
+    });
+
     router.on("/", () => {
         if (user.role === "ADMIN") return router.navigate("/admin/requests");
         if (user.role === "RESIDENT") return router.navigate("/resident/create");
