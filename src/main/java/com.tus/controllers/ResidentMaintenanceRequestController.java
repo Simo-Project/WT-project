@@ -5,9 +5,12 @@ import com.tus.db.models.MaintenanceRequest;
 import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import com.tus.dtos.CreateMaintenanceRequestDto;
+import com.tus.dtos.MaintenanceRequestDetailsDto;
 import com.tus.dtos.MaintenanceRequestSummaryDto;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -32,7 +35,6 @@ public class ResidentMaintenanceRequestController {
         AppUser user = users.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Enforce "own unit"
         String unit = user.getUnit();
 
         MaintenanceRequest mr = new MaintenanceRequest();
@@ -40,7 +42,6 @@ public class ResidentMaintenanceRequestController {
         mr.setCategory(dto.getCategory());
         mr.setDescription(dto.getDescription());
         mr.setUnit(unit);
-        // status defaults to NEW via @PrePersist (or set it here)
 
         MaintenanceRequest saved = requests.save(mr);
 
@@ -64,5 +65,30 @@ public class ResidentMaintenanceRequestController {
                         r.getId(), r.getCreatedOn(), r.getTask(), r.getStatus(), r.getPriority(), r.getUnit()
                 ))
                 .toList();
+    }
+
+    @GetMapping("/{id}")
+    public MaintenanceRequestDetailsDto getOne(@PathVariable Long id, Principal principal) {
+
+        AppUser user = users.findByUsername(principal.getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+
+        MaintenanceRequest r = requests.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+
+        if (user.getUnit() == null || !user.getUnit().equals(r.getUnit())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorised to view this request");
+        }
+
+        return new MaintenanceRequestDetailsDto(
+                r.getId(),
+                r.getCreatedOn(),
+                r.getTask(),
+                r.getCategory(),
+                r.getDescription(),
+                r.getStatus(),
+                r.getPriority(),
+                r.getUnit()
+        );
     }
 }
