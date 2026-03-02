@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="69d6680a-d08e-4c1e-9f71-13b6b7716de4" name="Changes" comment="Added Tests">
+      <change afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WT-project.eml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/tus/api/AdminRequestsRestAssuredIT.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="module" />
+      <option value="repository" />
+    </option>
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../WT-project\exportToHTML" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="39RgD6iEOzyfouRtk61cQfPStjY" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.AdminRequestsRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminRequestsSeleniumTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminRequestsSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminUpdateStatusRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateMaintenanceRequestDtoValidationUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestDefaultsUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestMapperUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestServiceIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestServiceUpdateStatusIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentCreateRequestSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentCreateRequestSeleniumTest.residentCanCreateRequestAndSeeItInMyRequestsTable.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentRequestsIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentViewDetailsRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.java in WT-project.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.tus in WT-project.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ui in WT-project.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.Main.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/us4-admin-update-requests&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\views\res" />
+      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\views\resident" />
+      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\views" />
+      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\admin" />
+      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.tus.db.models" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.java in WT-project">
+    <configuration name="ResidentCreateRequestSeleniumTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WT-project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.tus.ui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.tus.ui" />
+      <option name="MAIN_CLASS_NAME" value="com.tus.ui.ResidentCreateRequestSeleniumTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ResidentCreateRequestSeleniumTest.residentCanCreateRequestAndSeeItInMyRequestsTable" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WT-project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.tus.ui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.tus.ui" />
+      <option name="MAIN_CLASS_NAME" value="com.tus.ui.ResidentCreateRequestSeleniumTest" />
+      <option name="METHOD_NAME" value="residentCanCreateRequestAndSeeItInMyRequestsTable" />
+      <option name="TEST_OBJECT" value="method" />
+      <dir value="$PROJECT_DIR$/src/test/java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in WT-project" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WT-project" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="tus in WT-project" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WT-project" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/com/tus" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ui in WT-project" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WT-project" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/com/tus/ui" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="WT-project" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.tus.Main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.java in WT-project" />
+        <item itemvalue="JUnit.ui in WT-project" />
+        <item itemvalue="JUnit.tus in WT-project" />
+        <item itemvalue="JUnit.ResidentCreateRequestSeleniumTest.residentCanCreateRequestAndSeeItInMyRequestsTable" />
+        <item itemvalue="JUnit.ResidentCreateRequestSeleniumTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="69d6680a-d08e-4c1e-9f71-13b6b7716de4" name="Changes" comment="" />
+      <created>1770664174956</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770664174956</updated>
+      <workItem from="1770664176064" duration="5477000" />
+      <workItem from="1770749555241" duration="6515000" />
+      <workItem from="1770830084749" duration="3000" />
+      <workItem from="1770832607303" duration="53000" />
+      <workItem from="1771947119470" duration="7562000" />
+      <workItem from="1771962915349" duration="326000" />
+      <workItem from="1772181531614" duration="17341000" />
+      <workItem from="1772212871999" duration="566000" />
+      <workItem from="1772277820041" duration="8498000" />
+      <workItem from="1772313202316" duration="18000" />
+      <workItem from="1772313231130" duration="7652000" />
+      <workItem from="1772358775768" duration="1220000" />
+      <workItem from="1772360021328" duration="284000" />
+      <workItem from="1772360504099" duration="713000" />
+      <workItem from="1772361412771" duration="375000" />
+      <workItem from="1772362007253" duration="697000" />
+      <workItem from="1772362808138" duration="22142000" />
+      <workItem from="1772403369046" duration="13000" />
+      <workItem from="1772490377582" duration="300000" />
+    </task>
+    <task id="LOCAL-00001" summary="Base frame taken from MASE (WT)">
+      <option name="closed" value="true" />
+      <created>1770669522134</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1770669522134</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Create basic Admin Page + requests view">
+      <option name="closed" value="true" />
+      <created>1771950819605</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1771950819605</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added Tests">
+      <option name="closed" value="true" />
+      <created>1772199184409</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1772199184409</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[WIP] Add Resident + request">
+      <option name="closed" value="true" />
+      <created>1772201102170</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1772201102170</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[WIP] Add Resident + request">
+      <option name="closed" value="true" />
+      <created>1772203992818</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772203992818</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[WIP] Add Resident + request">
+      <option name="closed" value="true" />
+      <created>1772284394401</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1772284394401</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added Tests">
+      <option name="closed" value="true" />
+      <created>1772370444674</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772370444674</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[WIP] Added Resident Request Viewer">
+      <option name="closed" value="true" />
+      <created>1772373805700</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772373805700</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added Tests">
+      <option name="closed" value="true" />
+      <created>1772377540909</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1772377540909</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added Tests">
+      <option name="closed" value="true" />
+      <created>1772389908780</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1772389908780</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Base frame taken from MASE (WT)" />
+    <MESSAGE value="Create basic Admin Page + requests view" />
+    <MESSAGE value="[WIP] Add Resident + request" />
+    <MESSAGE value="[WIP] Added Resident Request Viewer" />
+    <MESSAGE value="Added Tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Tests" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/WT_project$java_in_WT_project.ic" NAME="java in WT-project Coverage Results" MODIFIED="1772377294591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+  </component>
+</project>
