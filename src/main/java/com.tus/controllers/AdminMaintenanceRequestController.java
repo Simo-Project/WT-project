@@ -3,7 +3,9 @@ package com.tus.controllers;
 import com.tus.db.models.Priority;
 import com.tus.db.models.RequestStatus;
 import com.tus.dtos.MaintenanceRequestSummaryDto;
+import com.tus.dtos.UpdateRequestStatusDto;
 import com.tus.services.MaintenanceRequestService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,5 +27,13 @@ public class AdminMaintenanceRequestController {
             @RequestParam Optional<Priority> priority
     ) {
         return service.list(status, priority);
+    }
+
+    @PatchMapping("/{id}/status")
+    public MaintenanceRequestSummaryDto updateStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateRequestStatusDto dto
+    ) {
+        return service.updateStatus(id, dto.getStatus());
     }
 }
