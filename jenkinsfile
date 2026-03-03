@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK-21'
+        maven 'Maven'
+    }
+
+    environment {
+        SONARQUBE_SERVER = 'SonarQubeServer'
+    }
+
+    stages {
+
+        stage('Build & Test') {
+            steps {
+                echo 'Running full Maven lifecycle...'
+                sh 'mvn clean verify -Pselenium'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=team-1-group-project \
+                        -Dsonar.host.url=http://localhost:9000
+                    """
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+            junit '**/target/failsafe-reports/*.xml'
+            jacoco()
+        }
+
+        success {
+            echo 'Build Successful!'
+        }
+
+        failure {
+            echo 'Build Failed!'
+        }
+    }
+}
