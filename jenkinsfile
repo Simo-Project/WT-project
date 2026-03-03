@@ -24,25 +24,61 @@ pipeline {
       }
     }
 
-    stage('Init') {
-      steps {
-        script {
-          // Use Maven Wrapper if present (preferred), else system Maven
-          if (isUnix()) {
-            if (fileExists('mvnw')) {
-              sh 'chmod +x mvnw'
-              env.MVN = './mvnw'
-            } else {
-              env.MVN = 'mvn'
-            }
-          } else {
-            env.MVN = fileExists('mvnw.cmd') ? 'mvnw.cmd' : 'mvn'
-          }
+   stage('Init') {
+     steps {
+       script {
+         if (isUnix()) {
+           // Prefer Maven Wrapper if present
+           if (fileExists('mvnw')) {
+             sh 'chmod +x mvnw'
+             env.MVN = './mvnw'
+           } else {
+             // Ensure Homebrew paths are visible to Jenkins
+             env.PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
 
-          echo "Using Maven command: ${env.MVN}"
-        }
-      }
-    }
+             // Try PATH first
+             def mvnPath = sh(returnStdout: true, script: "command -v mvn || true").trim()
+
+             // Fall back to common absolute paths
+             if (!mvnPath) {
+               def candidates = [
+                 "/opt/homebrew/bin/mvn",  // Apple Silicon brew
+                 "/usr/local/bin/mvn",     // Intel brew
+                 "/usr/bin/mvn"
+               ]
+               for (c in candidates) {
+                 if (sh(returnStatus: true, script: "test -x '${c}'") == 0) {
+                   mvnPath = c
+                   break
+                 }
+               }
+             }
+
+             if (!mvnPath) {
+               error("""
+   mvn not found for Jenkins.
+   Fix options:
+   1) Recommended: add Maven Wrapper to the repo (mvn -N wrapper:wrapper, commit mvnw + .mvn)
+   2) Install Maven on the Jenkins agent and make sure Jenkins can see it (brew install maven)
+   Current PATH: ${env.PATH}
+   """)
+             }
+
+             env.MVN = mvnPath
+           }
+         } else {
+           env.MVN = fileExists('mvnw.cmd') ? 'mvnw.cmd' : 'mvn'
+         }
+
+         echo "Using Maven command: ${env.MVN}"
+         if (isUnix()) {
+           sh "${env.MVN} -v"
+         } else {
+           bat "${env.MVN} -v"
+         }
+       }
+     }
+   }
 
     stage('Build + Test (non-UI)') {
       steps {
