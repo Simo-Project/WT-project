@@ -103,10 +103,6 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <configuration>
-                            <!-- safer than overwriting argLine directly -->
-                            <propertyName>jacocoArgLine</propertyName>
-                        </configuration>
                     </execution>
 
                     <execution>
