@@ -1,51 +1,144 @@
 pipeline {
-    agent any
+  agent any
 
-    tools {
-        jdk 'JDK-21'
-        maven 'Maven'
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+  }
+
+  parameters {
+    booleanParam(name: 'RUN_UI_TESTS', defaultValue: false, description: 'Run Selenium UI tests (*SeleniumTest). Requires Chrome/Chromium on the agent.')
+    booleanParam(name: 'RUN_SONAR', defaultValue: false, description: 'Run SonarQube analysis (requires Jenkins SonarQube config).')
+    string(name: 'SONARQUBE_ENV', defaultValue: 'SonarQube', description: 'Name of SonarQube server in Jenkins (Manage Jenkins → System).')
+  }
+
+  environment {
+    // Avoids noisy downloads in console
+    MAVEN_ARGS = '-B -ntp'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
     }
 
-    environment {
-        SONARQUBE_SERVER = 'SonarQubeServer'
-    }
-
-    stages {
-
-        stage('Build & Test') {
-            steps {
-                echo 'Running full Maven lifecycle...'
-                sh 'mvn clean verify -Pselenium'
+    stage('Init') {
+      steps {
+        script {
+          // Use Maven Wrapper if present (preferred), else system Maven
+          if (isUnix()) {
+            if (fileExists('mvnw')) {
+              sh 'chmod +x mvnw'
+              env.MVN = './mvnw'
+            } else {
+              env.MVN = 'mvn'
             }
-        }
+          } else {
+            env.MVN = fileExists('mvnw.cmd') ? 'mvnw.cmd' : 'mvn'
+          }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh """
-                        mvn sonar:sonar \
-                        -Dsonar.projectKey=team-1-group-project \
-                        -Dsonar.host.url=http://localhost:9000
-                    """
-                }
+          echo "Using Maven command: ${env.MVN}"
+        }
+      }
+    }
+
+    stage('Build + Test (non-UI)') {
+      steps {
+        script {
+          // Exclude Selenium tests by default so CI doesn't fail without Chrome.
+          // Note: -Dtest excludes apply to Surefire; -Dit.test applies to Failsafe.
+          def excludeUi = "-Dtest='!*SeleniumTest' -Dit.test='!*SeleniumTest'"
+
+          if (isUnix()) {
+            sh "${env.MVN} ${env.MAVEN_ARGS} clean verify ${excludeUi}"
+          } else {
+            bat "${env.MVN} ${env.MAVEN_ARGS} clean verify ${excludeUi}"
+          }
+        }
+      }
+    }
+
+    stage('UI Tests (Selenium)') {
+      when { expression { return params.RUN_UI_TESTS } }
+      steps {
+        script {
+          // Try to locate Chrome/Chromium and pass it explicitly to Selenium via webdriver.chrome.bin
+          def chromeBin = ''
+
+          if (isUnix()) {
+            // macOS common paths + some Linux common paths
+            def candidates = [
+              "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+              "${env.HOME}/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+              "/usr/bin/google-chrome",
+              "/usr/bin/google-chrome-stable",
+              "/usr/bin/chromium",
+              "/usr/bin/chromium-browser"
+            ]
+            for (c in candidates) {
+              def status = sh(returnStatus: true, script: "test -x '${c}'")
+              if (status == 0) { chromeBin = c; break }
             }
-        }
+          } else {
+            // Best-effort Windows default locations (adjust if needed)
+            def candidates = [
+              "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+              "C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe"
+            ]
+            // fileExists checks workspace; so just set and let Selenium fail clearly if wrong
+            chromeBin = candidates[0]
+          }
 
+          if (isUnix() && !chromeBin) {
+            error("""RUN_UI_TESTS=true but Chrome/Chromium wasn't found on this agent.
+Install Chrome, or adjust the path list in Jenkinsfile, or run UI tests in a Selenium Docker container.""")
+          }
+
+          echo "Using Chrome binary: ${chromeBin}"
+
+          def chromeProp = isUnix() ? "-Dwebdriver.chrome.bin='${chromeBin}'" : "-Dwebdriver.chrome.bin=\"${chromeBin}\""
+
+          if (isUnix()) {
+            sh "${env.MVN} ${env.MAVEN_ARGS} -Dtest='*SeleniumTest' -DfailIfNoTests=false test ${chromeProp}"
+          } else {
+            bat "${env.MVN} ${env.MAVEN_ARGS} -Dtest=*SeleniumTest -DfailIfNoTests=false test ${chromeProp}"
+          }
+        }
+      }
     }
 
-    post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-            junit '**/target/failsafe-reports/*.xml'
-            jacoco()
+    stage('SonarQube Analysis') {
+      when { expression { return params.RUN_SONAR } }
+      steps {
+        script {
+          // Requires SonarQube Scanner + server config in Jenkins
+          withSonarQubeEnv(params.SONARQUBE_ENV) {
+            if (isUnix()) {
+              sh "${env.MVN} ${env.MAVEN_ARGS} sonar:sonar"
+            } else {
+              bat "${env.MVN} ${env.MAVEN_ARGS} sonar:sonar"
+            }
+          }
         }
-
-        success {
-            echo 'Build Successful!'
-        }
-
-        failure {
-            echo 'Build Failed!'
-        }
+      }
     }
+  }
+
+  post {
+    always {
+      // Publish test reports (don’t fail the post step if one set isn’t present)
+      junit testResults: '**/target/surefire-reports/*.xml, **/target/failsafe-reports/*.xml',
+            allowEmptyResults: true
+
+      // JaCoCo: pick up exec files from unit + IT runs if present
+      jacoco execPattern: '**/target/*.exec',
+             classPattern: '**/target/classes',
+             sourcePattern: '**/src/main/java'
+
+      // Optional: archive HTML report if your Maven build generates it (common)
+      archiveArtifacts artifacts: 'target/site/jacoco/**/*', allowEmptyArchive: true
+    }
+  }
 }
