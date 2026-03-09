@@ -19,6 +19,11 @@ function initRoutes(user) {
         await loadView("/views/resident/request-details.html", "/views/resident/request-details.js");
     });
 
+    router.on("/admin/requests/:id", async (match) => {
+        window.routeParams = match.data;
+        await loadView("/views/admin/request-details.html", "/views/admin/request-details.js");
+    });
+
     router.on("/", () => {
         if (user.role === "ADMIN") return router.navigate("/admin/requests");
         if (user.role === "RESIDENT") return router.navigate("/resident/create");

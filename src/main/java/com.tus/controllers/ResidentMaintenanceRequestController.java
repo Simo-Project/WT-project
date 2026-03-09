@@ -51,7 +51,8 @@ public class ResidentMaintenanceRequestController {
                 saved.getTask(),
                 saved.getStatus(),
                 saved.getPriority(),
-                saved.getUnit()
+                saved.getUnit(),
+                saved.getAssignedTo().getUsername()
         );
     }
 
@@ -62,7 +63,7 @@ public class ResidentMaintenanceRequestController {
 
         return requests.findByUnit(user.getUnit()).stream()
                 .map(r -> new MaintenanceRequestSummaryDto(
-                        r.getId(), r.getCreatedOn(), r.getTask(), r.getStatus(), r.getPriority(), r.getUnit()
+                        r.getId(), r.getCreatedOn(), r.getTask(), r.getStatus(), r.getPriority(), r.getUnit(), r.getAssignedTo().getUsername()
                 ))
                 .toList();
     }
@@ -88,7 +89,8 @@ public class ResidentMaintenanceRequestController {
                 r.getDescription(),
                 r.getStatus(),
                 r.getPriority(),
-                r.getUnit()
+                r.getUnit(),
+                r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null
         );
     }
 }

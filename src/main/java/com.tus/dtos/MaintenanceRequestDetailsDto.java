@@ -1,5 +1,6 @@
 package com.tus.dtos;
 
+import com.tus.db.models.AppUser;
 import com.tus.db.models.Priority;
 import com.tus.db.models.RequestCategory;
 import com.tus.db.models.RequestStatus;
@@ -15,10 +16,11 @@ public class MaintenanceRequestDetailsDto {
     private RequestStatus status;
     private Priority priority;
     private String unit;
+    private String assignedToUsername;
 
     public MaintenanceRequestDetailsDto(Long id, LocalDate createdOn, String task,
                                         RequestCategory category, String description,
-                                        RequestStatus status, Priority priority, String unit) {
+                                        RequestStatus status, Priority priority, String unit, String assignedToUsername) {
         this.id = id;
         this.createdOn = createdOn;
         this.task = task;
@@ -27,6 +29,7 @@ public class MaintenanceRequestDetailsDto {
         this.status = status;
         this.priority = priority;
         this.unit = unit;
+        this.assignedToUsername = assignedToUsername;
     }
 
     public Long getId() { return id; }
@@ -37,4 +40,5 @@ public class MaintenanceRequestDetailsDto {
     public RequestStatus getStatus() { return status; }
     public Priority getPriority() { return priority; }
     public String getUnit() { return unit; }
+    public String getAssignedToUsername() { return assignedToUsername; }
 }
