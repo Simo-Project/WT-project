@@ -7,6 +7,9 @@ import com.tus.db.repos.MaintenanceRequestRepository;
 import com.tus.dtos.CreateMaintenanceRequestDto;
 import com.tus.dtos.MaintenanceRequestDetailsDto;
 import com.tus.dtos.MaintenanceRequestSummaryDto;
+import com.tus.dtos.CreateCommentDto;
+import com.tus.dtos.RequestCommentDto;
+import com.tus.services.RequestCommentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +24,13 @@ public class ResidentMaintenanceRequestController {
 
     private final MaintenanceRequestRepository requests;
     private final AppUserRepository users;
+    private final RequestCommentService commentService;
 
     public ResidentMaintenanceRequestController(MaintenanceRequestRepository requests,
-                                                AppUserRepository users) {
+                                                AppUserRepository users, RequestCommentService commentService) {
         this.requests = requests;
         this.users = users;
+        this.commentService = commentService;
     }
 
     @PostMapping
@@ -81,6 +86,8 @@ public class ResidentMaintenanceRequestController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorised to view this request");
         }
 
+        List<RequestCommentDto> comments = commentService.getCommentsForResident(id, principal.getName());
+
         return new MaintenanceRequestDetailsDto(
                 r.getId(),
                 r.getCreatedOn(),
@@ -90,7 +97,20 @@ public class ResidentMaintenanceRequestController {
                 r.getStatus(),
                 r.getPriority(),
                 r.getUnit(),
-                r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null
+                r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null,
+                comments
         );
+    }
+
+    @PostMapping("/{id}/comments")
+    public RequestCommentDto addComment(@PathVariable Long id,
+                                        @Valid @RequestBody CreateCommentDto dto,
+                                        Principal principal) {
+        return commentService.addResidentComment(id, principal.getName(), dto.getText());
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<RequestCommentDto> comments(@PathVariable Long id, Principal principal) {
+        return commentService.getCommentsForResident(id, principal.getName());
     }
 }

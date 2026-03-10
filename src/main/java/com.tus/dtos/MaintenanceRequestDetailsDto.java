@@ -6,6 +6,7 @@ import com.tus.db.models.RequestCategory;
 import com.tus.db.models.RequestStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class MaintenanceRequestDetailsDto {
     private Long id;
@@ -17,10 +18,11 @@ public class MaintenanceRequestDetailsDto {
     private Priority priority;
     private String unit;
     private String assignedToUsername;
+    private List<RequestCommentDto> comments;
 
     public MaintenanceRequestDetailsDto(Long id, LocalDate createdOn, String task,
                                         RequestCategory category, String description,
-                                        RequestStatus status, Priority priority, String unit, String assignedToUsername) {
+                                        RequestStatus status, Priority priority, String unit, String assignedToUsername,  List<RequestCommentDto> comments) {
         this.id = id;
         this.createdOn = createdOn;
         this.task = task;
@@ -30,6 +32,7 @@ public class MaintenanceRequestDetailsDto {
         this.priority = priority;
         this.unit = unit;
         this.assignedToUsername = assignedToUsername;
+        this.comments = comments;
     }
 
     public Long getId() { return id; }
@@ -41,4 +44,5 @@ public class MaintenanceRequestDetailsDto {
     public Priority getPriority() { return priority; }
     public String getUnit() { return unit; }
     public String getAssignedToUsername() { return assignedToUsername; }
+    public List<RequestCommentDto> getComments() { return comments; }
 }
