@@ -12,7 +12,8 @@ public class MaintenanceRequestMapper {
                 mr.getTask(),
                 mr.getStatus(),
                 mr.getPriority(),
-                mr.getUnit()
+                mr.getUnit(),
+                mr.getAssignedTo() != null ? mr.getAssignedTo().getUsername() : null
         );
     }
 }

@@ -16,6 +16,9 @@ $(document).ready(function () {
             { data: "priority" },
             { data: "unit" },
             { data: "createdOn" },
+            { data: "assignedToUsername",
+                render: function(data) { return data || "Unassigned"; }
+            },
             {
                 data: null,
                 orderable: false,
@@ -26,16 +29,28 @@ $(document).ready(function () {
                     ).join("");
 
                     return `
-                      <div class="d-flex gap-2 align-items-center">
-                        <select class="form-select form-select-sm status-select">
-                          ${options}
-                        </select>
-                        <button class="btn btn-sm btn-primary update-status">Update</button>
+                      <div class="d-flex flex-column gap-2">
+                        <button class="btn btn-sm btn-outline-primary view-request" data-id="${row.id}">
+                          View
+                        </button>
+
+                        <div class="d-flex gap-2 align-items-center">
+                          <select class="form-select form-select-sm status-select">
+                            ${options}
+                          </select>
+                          <button class="btn btn-sm btn-primary update-status">Update</button>
+                        </div>
                       </div>
                     `;
                 }
             }
         ]
+    });
+
+
+    $("#requestsTable").on("click", ".view-request", function () {
+        const id = $(this).data("id");
+        window.router.navigate(`/admin/requests/${id}`);
     });
 
     $("#requestsTable").on("click", ".update-status", async function () {

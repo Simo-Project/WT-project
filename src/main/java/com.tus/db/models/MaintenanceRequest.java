@@ -35,6 +35,10 @@ public class MaintenanceRequest {
     @Column(nullable = false, length = 1000)
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "assigned_to_user_id")
+    private AppUser assignedTo;
+
     public MaintenanceRequest() {}
 
     public MaintenanceRequest(String task, RequestStatus status, Priority priority, String unit, String createdOn) {
@@ -59,6 +63,7 @@ public class MaintenanceRequest {
     public LocalDate getCreatedOn() { return createdOn; }
     public RequestCategory getCategory() { return category; }
     public String getDescription() { return description; }
+    public AppUser getAssignedTo() { return assignedTo; }
 
     public void setTask(String task) { this.task = task; }
     public void setStatus(RequestStatus status) { this.status = status; }
@@ -67,4 +72,5 @@ public class MaintenanceRequest {
     public void setCreatedOn(LocalDate createdOn) { this.createdOn = createdOn; }
     public void setCategory(RequestCategory category) { this.category = category; }
     public void setDescription(String description) { this.description = description; }
+    public void setAssignedTo(AppUser assignedTo) { this.assignedTo = assignedTo; }
 }

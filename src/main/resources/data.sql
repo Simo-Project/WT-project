@@ -12,3 +12,9 @@ values ('admin', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu',
 
 insert into app_user (username, password, role, unit)
 values ('resident', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 12');
+
+insert into app_user (username, password, role, unit)
+values ('staff1', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
+
+insert into app_user (username, password, role, unit)
+values ('staff2', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
