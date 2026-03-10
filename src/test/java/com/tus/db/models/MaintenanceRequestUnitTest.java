@@ -46,7 +46,8 @@ class MaintenanceRequestUnitTest {
                 "Replace smoke detector",
                 RequestStatus.NEW,
                 Priority.HIGH,
-                "Apt 12"
+                "Apt 12",
+                "s"
         );
 
         assertEquals(1L, dto.getId());
