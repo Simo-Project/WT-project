@@ -1,7 +1,6 @@
 package com.tus.controllers;
 
-import com.tus.db.models.AppUser;
-import com.tus.db.models.UserRole;
+import com.tus.db.models.*;
 import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import com.tus.dtos.AssignRequestDto;
@@ -11,13 +10,12 @@ import com.tus.services.MaintenanceRequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -26,44 +24,48 @@ import static org.mockito.Mockito.*;
 class AdminMaintenanceRequestControllerUnitTest {
 
     @Mock
-    private MaintenanceRequestService service;
-
-    @Mock
     private AppUserRepository users;
 
     @Mock
     private MaintenanceRequestRepository requests;
 
-    @InjectMocks
+    private MaintenanceRequestService service;
     private AdminMaintenanceRequestController controller;
-
-    private MaintenanceRequestSummaryDto summaryDto;
 
     @BeforeEach
     void setUp() {
-        summaryDto = new MaintenanceRequestSummaryDto(
-                1L,
-                LocalDate.of(2026, 3, 10),
-                "Fix leaking tap",
-                com.tus.db.models.RequestStatus.NEW,
-                com.tus.db.models.Priority.MEDIUM,
-                "Apt 12",
-                "staff1"
-        );
+        service = new MaintenanceRequestService(requests, users);
+        controller = new AdminMaintenanceRequestController(service, users, requests);
     }
 
     @Test
-    void assignRequest_delegatesToService() {
+    void assignRequest_returnsAssignedStaffUsername() {
+        MaintenanceRequest request = new MaintenanceRequest();
+        request.setTask("Fix leaking tap");
+        request.setStatus(RequestStatus.NEW);
+        request.setPriority(Priority.MEDIUM);
+        request.setUnit("Apt 12");
+        request.setCreatedOn(LocalDate.of(2026, 3, 10));
+
+        AppUser staff = new AppUser();
+        staff.setUsername("staff1");
+        staff.setRole(UserRole.STAFF);
+
         AssignRequestDto dto = new AssignRequestDto();
         dto.setStaffUserId(2L);
 
-        when(service.assignRequest(1L, 2L)).thenReturn(summaryDto);
+        when(requests.findById(1L)).thenReturn(Optional.of(request));
+        when(users.findById(2L)).thenReturn(Optional.of(staff));
+        when(requests.save(request)).thenReturn(request);
 
         MaintenanceRequestSummaryDto result = controller.assignRequest(1L, dto);
 
         assertEquals("staff1", result.getAssignedToUsername());
+        assertEquals(staff, request.getAssignedTo());
 
-        verify(service).assignRequest(1L, 2L);
+        verify(requests).findById(1L);
+        verify(users).findById(2L);
+        verify(requests).save(request);
     }
 
     @Test
