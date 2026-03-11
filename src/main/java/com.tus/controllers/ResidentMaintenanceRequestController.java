@@ -10,6 +10,7 @@ import com.tus.dtos.MaintenanceRequestSummaryDto;
 import com.tus.dtos.CreateCommentDto;
 import com.tus.dtos.RequestCommentDto;
 import com.tus.services.RequestCommentService;
+import com.tus.services.MaintenanceRequestService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +26,14 @@ public class ResidentMaintenanceRequestController {
     private final MaintenanceRequestRepository requests;
     private final AppUserRepository users;
     private final RequestCommentService commentService;
+    private final MaintenanceRequestService cancelRequest;
 
     public ResidentMaintenanceRequestController(MaintenanceRequestRepository requests,
-                                                AppUserRepository users, RequestCommentService commentService) {
+                                                AppUserRepository users, RequestCommentService commentService, MaintenanceRequestService cancelRequest) {
         this.requests = requests;
         this.users = users;
         this.commentService = commentService;
+        this.cancelRequest = cancelRequest;
     }
 
     @PostMapping
@@ -40,13 +43,13 @@ public class ResidentMaintenanceRequestController {
         AppUser user = users.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String unit = user.getUnit();
 
         MaintenanceRequest mr = new MaintenanceRequest();
         mr.setTask(dto.getTitle());
         mr.setCategory(dto.getCategory());
         mr.setDescription(dto.getDescription());
-        mr.setUnit(unit);
+        mr.setUnit(user.getUnit());
+        mr.setCreatedBy(user);
 
         MaintenanceRequest saved = requests.save(mr);
 
@@ -66,7 +69,7 @@ public class ResidentMaintenanceRequestController {
         AppUser user = users.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return requests.findByUnit(user.getUnit()).stream()
+        return requests.findByCreatedByUsername(user.getUsername()).stream()
                 .map(r -> new MaintenanceRequestSummaryDto(
                         r.getId(), r.getCreatedOn(), r.getTask(), r.getStatus(), r.getPriority(), r.getUnit(),  r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null
                 ))
@@ -82,7 +85,7 @@ public class ResidentMaintenanceRequestController {
         MaintenanceRequest r = requests.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
 
-        if (user.getUnit() == null || !user.getUnit().equals(r.getUnit())) {
+        if (r.getCreatedBy() == null || !r.getCreatedBy().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorised to view this request");
         }
 
@@ -112,5 +115,10 @@ public class ResidentMaintenanceRequestController {
     @GetMapping("/{id}/comments")
     public List<RequestCommentDto> comments(@PathVariable Long id, Principal principal) {
         return commentService.getCommentsForResident(id, principal.getName());
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public MaintenanceRequestSummaryDto cancel(@PathVariable Long id, Principal principal) {
+        return cancelRequest.cancelResidentRequest(id, principal.getName());
     }
 }
