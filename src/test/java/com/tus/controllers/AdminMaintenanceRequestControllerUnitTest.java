@@ -7,6 +7,7 @@ import com.tus.dtos.AssignRequestDto;
 import com.tus.dtos.MaintenanceRequestSummaryDto;
 import com.tus.dtos.StaffOptionDto;
 import com.tus.services.MaintenanceRequestService;
+import com.tus.services.RequestCommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,11 +32,12 @@ class AdminMaintenanceRequestControllerUnitTest {
 
     private MaintenanceRequestService service;
     private AdminMaintenanceRequestController controller;
+    private RequestCommentService commentService;
 
     @BeforeEach
     void setUp() {
         service = new MaintenanceRequestService(requests, users);
-        controller = new AdminMaintenanceRequestController(service, users, requests);
+        controller = new AdminMaintenanceRequestController(service, users, requests, commentService);
     }
 
     @Test
