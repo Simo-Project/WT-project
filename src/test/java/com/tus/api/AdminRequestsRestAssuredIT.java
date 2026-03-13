@@ -58,7 +58,7 @@ class AdminRequestsRestAssuredIT {
         return given()
                 .redirects().follow(false)
                 .contentType(ContentType.URLENC)
-                .formParam("username", "admin")
+                .formParam("username", "SG")
                 .formParam("password", "admin123")
                 .when()
                 .post("/login")

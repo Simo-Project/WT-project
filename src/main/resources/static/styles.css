@@ -29,3 +29,12 @@ tr:nth-child(even) {
 table.dataTable {
     width: 100% !important;
 }
+
+.brand-title,
+.brand-title:hover,
+.brand-title:focus,
+.brand-title:active,
+.brand-title:visited {
+    color: #002cff !important;
+    text-decoration: none;
+}

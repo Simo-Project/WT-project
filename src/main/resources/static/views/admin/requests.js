@@ -1,13 +1,29 @@
 $(document).ready(function () {
-    const STATUSES = ["NEW", "IN_PROGRESS", "AWAITING_PARTS", "CLOSED", "CANCELLED"];
+    const STATUSES = ["NEW", "IN_PROGRESS", "AWAITING_PARTS", "CLOSED"];
 
     function showMsg(html) {
         document.getElementById("adminMsg").innerHTML = html;
     }
 
+    const statusFilter = document.getElementById("statusFilter");
+    const priorityFilter = document.getElementById("priorityFilter");
+    const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+
     const table = $("#requestsTable").DataTable({
         ajax: {
             url: "/api/admin/requests",
+            data: function (d) {
+                const status = statusFilter.value;
+                const priority = priorityFilter.value;
+
+                if (status) {
+                    d.status = status;
+                }
+
+                if (priority) {
+                    d.priority = priority;
+                }
+            },
             dataSrc: ""
         },
         columns: [
@@ -49,6 +65,19 @@ $(document).ready(function () {
         ]
     });
 
+    statusFilter.addEventListener("change", function () {
+        table.ajax.reload();
+    });
+
+    priorityFilter.addEventListener("change", function () {
+        table.ajax.reload();
+    });
+
+    clearFiltersBtn.addEventListener("click", function () {
+        statusFilter.value = "";
+        priorityFilter.value = "";
+        table.ajax.reload();
+    });
 
     $("#requestsTable").on("click", ".view-request", function () {
         const id = $(this).data("id");
