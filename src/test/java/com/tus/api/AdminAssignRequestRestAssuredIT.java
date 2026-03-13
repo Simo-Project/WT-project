@@ -204,4 +204,25 @@ class AdminAssignRequestRestAssuredIT {
                 .body("username", hasItems("staff1", "staff2"))
                 .body("username", not(hasItems("admin", "resident")));
     }
+
+    @Test
+    void adminCannotAssignCancelledRequest_returnsConflict() {
+        SessionFilter adminSession = login("admin", "admin123");
+
+        MaintenanceRequest request = requestRepo.findById(requestId).orElseThrow();
+        request.setStatus(RequestStatus.CANCELLED);
+        requestRepo.saveAndFlush(request);
+
+        given()
+                .filter(adminSession)
+                .contentType("application/json")
+                .body(Map.of("staffUserId", staff1Id))
+                .when()
+                .patch("/api/admin/requests/{id}/assign", requestId)
+                .then()
+                .statusCode(409)
+                .body("message", equalTo("Cannot assign a cancelled request"));
+    }
 }
+
+

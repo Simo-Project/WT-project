@@ -132,4 +132,23 @@ class AdminUpdateStatusRestAssuredIT {
                 .then()
                 .statusCode(403);
     }
+
+    @Test
+    void adminCannotPatchStatus_whenRequestIsCancelled() {
+        SessionFilter adminSession = login("admin", "admin123");
+
+        MaintenanceRequest request = requestRepo.findById(requestId).orElseThrow();
+        request.setStatus(RequestStatus.CANCELLED);
+        requestRepo.saveAndFlush(request);
+
+        given()
+                .filter(adminSession)
+                .contentType("application/json")
+                .body(Map.of("status", "IN_PROGRESS"))
+                .when()
+                .patch("/api/admin/requests/{id}/status", requestId)
+                .then()
+                .statusCode(409)
+                .body("message", equalTo("Cancelled requests cannot be updated"));
+    }
 }

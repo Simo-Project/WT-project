@@ -65,15 +65,16 @@ class RequestCommentsIT {
         return u;
     }
 
-    private MaintenanceRequest makeRequest(String task, String unit) {
+    private MaintenanceRequest makeRequest(String task, String unit, RequestStatus status, AppUser createdBy) {
         MaintenanceRequest mr = new MaintenanceRequest();
         mr.setTask(task);
         mr.setUnit(unit);
         mr.setCategory(RequestCategory.OTHER);
         mr.setDescription("test");
         mr.setPriority(Priority.MEDIUM);
-        mr.setStatus(RequestStatus.NEW);
+        mr.setStatus(status);
         mr.setCreatedOn(LocalDate.of(2026, 3, 11));
+        mr.setCreatedBy(createdBy);
         return requestRepo.saveAndFlush(mr);
     }
 
@@ -99,7 +100,10 @@ class RequestCommentsIT {
     @Test
     void residentCanAddCommentToOwnRequest_andSeeItInHistory() throws Exception {
         MockHttpSession session = login("resident", "resident123");
-        MaintenanceRequest request = makeRequest("Fix heater", "Apt 12");
+        AppUser resident = userRepo.findByUsername("resident").orElseThrow();
+        MaintenanceRequest request = requestRepo.save(
+                makeRequest("Fix heater", "Apt 12", RequestStatus.NEW, resident)
+        );
 
         Map<String, Object> body = new HashMap<>();
         body.put("text", "Please call before arriving.");
@@ -132,7 +136,7 @@ class RequestCommentsIT {
     @Test
     void residentCannotCommentOnOtherUnitsRequest() throws Exception {
         MockHttpSession session = login("resident", "resident123");
-        MaintenanceRequest otherUnitsRequest = makeRequest("Paint wall", "Apt 3");
+        MaintenanceRequest otherUnitsRequest = makeRequest("Paint wall", "Apt 3", RequestStatus.NEW, resident2);
 
         Map<String, Object> body = new HashMap<>();
         body.put("text", "Trying to comment on another unit");
@@ -149,7 +153,7 @@ class RequestCommentsIT {
     @Test
     void residentCommentValidationFails_whenEmpty() throws Exception {
         MockHttpSession session = login("resident", "resident123");
-        MaintenanceRequest request = makeRequest("Fix sink", "Apt 12");
+        MaintenanceRequest request = makeRequest("Fix sink", "Apt 12", RequestStatus.NEW, resident);
 
         mockMvc.perform(post("/api/requests/{id}/comments", request.getId())
                         .session(session)
@@ -168,7 +172,7 @@ class RequestCommentsIT {
     @Test
     void commentsAreReturnedInChronologicalOrder() throws Exception {
         MockHttpSession session = login("resident", "resident123");
-        MaintenanceRequest request = makeRequest("Door issue", "Apt 12");
+        MaintenanceRequest request = makeRequest("Door issue", "Apt 12", RequestStatus.NEW, resident);
 
         makeComment(request, resident, "Older comment", LocalDateTime.of(2026, 3, 10, 9, 0));
         makeComment(request, resident, "Newer comment", LocalDateTime.of(2026, 3, 10, 10, 0));
@@ -184,7 +188,7 @@ class RequestCommentsIT {
     @Test
     void adminCanCommentOnAnyRequest_andSeeItInDetailHistory() throws Exception {
         MockHttpSession adminSession = login("admin", "admin123");
-        MaintenanceRequest request = makeRequest("Electrical fault", "Apt 3");
+        MaintenanceRequest request = makeRequest("Electrical fault", "Apt 3", RequestStatus.NEW, resident);
 
         Map<String, Object> body = new HashMap<>();
         body.put("text", "Engineer booked for tomorrow.");

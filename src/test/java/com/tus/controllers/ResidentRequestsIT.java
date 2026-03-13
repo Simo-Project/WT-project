@@ -21,8 +21,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -110,11 +109,14 @@ class ResidentRequestsIT {
     }
 
     @Test
-    void myRequests_returnsOnlyRequestsForResidentsUnit() throws Exception {
+    void myRequests_returnsOnlyRequestsCreatedByResident() throws Exception {
         MockHttpSession session = login("resident", "resident123");
 
-        requestRepo.save(makeRequest("Fix heater", "Apt 12"));
-        requestRepo.save(makeRequest("Paint wall", "Apt 3"));
+        AppUser resident = userRepo.findByUsername("resident").orElseThrow();
+        AppUser resident2 = userRepo.findByUsername("resident2").orElseThrow();
+
+        requestRepo.save(makeRequest("Fix heater", "Apt 12", RequestStatus.NEW, resident));
+        requestRepo.save(makeRequest("Paint wall", "Apt 3", RequestStatus.NEW, resident2));
 
         mockMvc.perform(get("/api/requests/my").session(session))
                 .andExpect(status().isOk())
@@ -124,15 +126,76 @@ class ResidentRequestsIT {
                 .andExpect(jsonPath("$[0].task").value("Fix heater"));
     }
 
-    private MaintenanceRequest makeRequest(String task, String unit) {
+    private MaintenanceRequest makeRequest(String task, String unit, RequestStatus status, AppUser createdBy) {
         MaintenanceRequest mr = new MaintenanceRequest();
         mr.setTask(task);
         mr.setUnit(unit);
         mr.setCategory(RequestCategory.OTHER);
         mr.setDescription("test");
         mr.setPriority(Priority.MEDIUM);
-        mr.setStatus(RequestStatus.NEW);
+        mr.setStatus(status);
         mr.setCreatedOn(LocalDate.of(2026, 2, 28));
+        mr.setCreatedBy(createdBy);
         return mr;
+    }
+
+    @Test
+    void residentCanCancelOwnNewRequest() throws Exception {
+        MockHttpSession session = login("resident", "resident123");
+
+        AppUser resident = userRepo.findByUsername("resident").orElseThrow();
+        MaintenanceRequest request = requestRepo.saveAndFlush(
+                makeRequest("Fix heater", "Apt 12", RequestStatus.NEW, resident)
+        );
+
+        mockMvc.perform(patch("/api/requests/{id}/cancel", request.getId())
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(request.getId()))
+                .andExpect(jsonPath("$.status").value("CANCELLED"));
+
+        assertEquals(RequestStatus.CANCELLED,
+                requestRepo.findById(request.getId()).orElseThrow().getStatus());
+
+        mockMvc.perform(get("/api/requests/my").session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+    }
+
+    @Test
+    void residentCannotCancelOtherResidentsRequest() throws Exception {
+        MockHttpSession session = login("resident", "resident123");
+
+        AppUser resident2 = userRepo.findByUsername("resident2").orElseThrow();
+        MaintenanceRequest request = requestRepo.saveAndFlush(
+                makeRequest("Paint wall", "Apt 3", RequestStatus.NEW, resident2)
+        );
+
+        mockMvc.perform(patch("/api/requests/{id}/cancel", request.getId())
+                        .session(session))
+                .andExpect(status().isForbidden());
+
+        assertEquals(RequestStatus.NEW,
+                requestRepo.findById(request.getId()).orElseThrow().getStatus());
+    }
+
+    @Test
+    void residentCannotCancelOwnRequest_whenAlreadyInProgress() throws Exception {
+        MockHttpSession session = login("resident", "resident123");
+
+        AppUser resident = userRepo.findByUsername("resident").orElseThrow();
+        MaintenanceRequest request = requestRepo.saveAndFlush(
+                makeRequest("Fix heater", "Apt 12", RequestStatus.IN_PROGRESS, resident)
+        );
+
+        mockMvc.perform(patch("/api/requests/{id}/cancel", request.getId())
+                        .session(session))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Only requests with status NEW can be cancelled"));
+
+        assertEquals(RequestStatus.IN_PROGRESS,
+                requestRepo.findById(request.getId()).orElseThrow().getStatus());
     }
 }
