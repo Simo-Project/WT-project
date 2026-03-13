@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +34,7 @@ class MaintenanceRequestServiceIntegrationTest {
     @BeforeEach
     void setUp() {
         repo.deleteAll();
+        repo.flush();
 
         repo.save(make("Replace smoke detector", RequestStatus.NEW, Priority.HIGH, "Apt 12", LocalDate.of(2026, 2, 10)));
         repo.save(make("Fix broken air vent", RequestStatus.IN_PROGRESS, Priority.MEDIUM, "Apt 3", LocalDate.of(2026, 2, 9)));
@@ -69,5 +71,26 @@ class MaintenanceRequestServiceIntegrationTest {
         List<MaintenanceRequestSummaryDto> results = service.list(Optional.of(RequestStatus.IN_PROGRESS), Optional.of(Priority.MEDIUM));
         assertEquals(1, results.size());
         assertEquals("Fix broken air vent", results.get(0).getTask());
+    }
+
+    @Test
+    void updateStatus_whenCancelled_keepsCancelledAndThrows() {
+        MaintenanceRequest mr = new MaintenanceRequest();
+        mr.setTask("Cancelled request");
+        mr.setCategory(RequestCategory.OTHER);
+        mr.setDescription("test");
+        mr.setUnit("Apt 12");
+        mr.setStatus(RequestStatus.CANCELLED);
+        mr.setPriority(Priority.MEDIUM);
+
+        Long id = repo.saveAndFlush(mr).getId();
+
+        ResponseStatusException ex = assertThrows(
+                ResponseStatusException.class,
+                () -> service.updateStatus(id, RequestStatus.CLOSED)
+        );
+
+        assertEquals(409, ex.getStatusCode().value());
+        assertEquals(RequestStatus.CANCELLED, repo.findById(id).orElseThrow().getStatus());
     }
 }

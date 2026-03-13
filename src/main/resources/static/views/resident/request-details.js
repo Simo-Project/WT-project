@@ -36,6 +36,18 @@ function renderComments(comments) {
     `).join("");
 }
 
+function updateCancelButton(request) {
+    const cancelBtn = document.getElementById("cancelBtn");
+
+    if (request.status === "NEW") {
+        cancelBtn.disabled = false;
+        cancelBtn.title = "";
+    } else {
+        cancelBtn.disabled = true;
+        cancelBtn.title = "Only requests with status NEW can be cancelled.";
+    }
+}
+
 function renderDetails(request) {
     document.getElementById("detailsCard").innerHTML = `
       <div class="card-body">
@@ -54,6 +66,7 @@ function renderDetails(request) {
     `;
 
     renderComments(request.comments || []);
+    updateCancelButton(request);
 }
 
 (async function () {
@@ -76,6 +89,30 @@ function renderDetails(request) {
 
     try {
         await loadRequest();
+
+        document.getElementById("cancelBtn").addEventListener("click", async () => {
+            const cancelBtn = document.getElementById("cancelBtn");
+            cancelBtn.disabled = true;
+
+            try {
+                await apiPatch(`/api/requests/${id}/cancel`, {});
+                sessionStorage.setItem("residentRequestsFlash", "Request cancelled successfully.");
+                window.router.navigate("/resident/my-requests");
+            } catch (err) {
+                console.log(err);
+
+                if (err.status === 403) {
+                    showDetailsError(err.data?.message || "You can only cancel your own requests.");
+                } else if (err.status === 409) {
+                    showDetailsError(err.data?.message || "This request can no longer be cancelled.");
+                } else {
+                    showDetailsError("Could not cancel request.");
+                }
+
+                const refreshed = await loadRequest();
+                updateCancelButton(refreshed);
+            }
+        });
 
         document.getElementById("commentForm").addEventListener("submit", async (e) => {
             e.preventDefault();

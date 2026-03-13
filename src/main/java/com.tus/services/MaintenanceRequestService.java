@@ -46,6 +46,10 @@ public class MaintenanceRequestService {
         MaintenanceRequest r = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
 
+        if (r.getStatus() == RequestStatus.CANCELLED && newStatus != RequestStatus.CANCELLED) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cancelled requests cannot be updated");
+        }
+
         r.setStatus(newStatus);
         MaintenanceRequest saved = repo.save(r);
 
@@ -64,6 +68,10 @@ public class MaintenanceRequestService {
         MaintenanceRequest r = repo.findById(requestId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
 
+        if (r.getStatus() == RequestStatus.CANCELLED) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cannot assign a cancelled request");
+        }
+
         if (staffUserId == null) {
             r.setAssignedTo(null);
         } else {
@@ -78,6 +86,35 @@ public class MaintenanceRequestService {
         }
 
         MaintenanceRequest saved = repo.save(r);
+
+        return new MaintenanceRequestSummaryDto(
+                saved.getId(),
+                saved.getCreatedOn(),
+                saved.getTask(),
+                saved.getStatus(),
+                saved.getPriority(),
+                saved.getUnit(),
+                saved.getAssignedTo() != null ? saved.getAssignedTo().getUsername() : null
+        );
+    }
+
+    public MaintenanceRequestSummaryDto cancelRequestAsResident(Long requestId, String username) {
+        AppUser resident = userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+
+        MaintenanceRequest request = repo.findById(requestId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+
+        if (request.getCreatedBy() == null || !resident.getId().equals(request.getCreatedBy().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only cancel your own requests");
+        }
+
+        if (request.getStatus() != RequestStatus.NEW) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only requests with status NEW can be cancelled");
+        }
+
+        request.setStatus(RequestStatus.CANCELLED);
+        MaintenanceRequest saved = repo.save(request);
 
         return new MaintenanceRequestSummaryDto(
                 saved.getId(),

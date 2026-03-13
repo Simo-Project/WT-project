@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const STATUSES = ["NEW", "IN_PROGRESS", "AWAITING_PARTS", "CLOSED"];
+    const STATUSES = ["NEW", "IN_PROGRESS", "AWAITING_PARTS", "CLOSED", "CANCELLED"];
 
     function showMsg(html) {
         document.getElementById("adminMsg").innerHTML = html;
@@ -24,24 +24,26 @@ $(document).ready(function () {
                 orderable: false,
                 searchable: false,
                 render: function (data, type, row) {
+                    const isCancelled = row.status === "CANCELLED"; // ADDED
+
                     const options = STATUSES.map(s =>
                         `<option value="${s}" ${s === row.status ? "selected" : ""}>${s.replaceAll("_", " ")}</option>`
                     ).join("");
 
                     return `
-                      <div class="d-flex flex-column gap-2">
-                        <button class="btn btn-sm btn-outline-primary view-request" data-id="${row.id}">
-                          View
-                        </button>
+      <div class="d-flex flex-column gap-2">
+        <button class="btn btn-sm btn-outline-primary view-request" data-id="${row.id}">
+          View
+        </button>
 
-                        <div class="d-flex gap-2 align-items-center">
-                          <select class="form-select form-select-sm status-select">
-                            ${options}
-                          </select>
-                          <button class="btn btn-sm btn-primary update-status">Update</button>
-                        </div>
-                      </div>
-                    `;
+        <div class="d-flex gap-2 align-items-center">
+          <select class="form-select form-select-sm status-select" ${isCancelled ? "disabled" : ""}>
+            ${options}
+          </select>
+          <button class="btn btn-sm btn-primary update-status" ${isCancelled ? "disabled" : ""}>Update</button>
+        </div>
+      </div>
+    `;
                 }
             }
         ]
@@ -65,14 +67,14 @@ $(document).ready(function () {
         try {
             const updated = await apiPatch(`/api/admin/requests/${rowData.id}/status`, { status: newStatus });
 
-            // Immediately reflect in the DataTable (no full reload needed)
             rowData.status = updated.status;
             rowApi.data(rowData).invalidate().draw(false);
 
             showMsg(`<div class="alert alert-success">Status updated to <strong>${updated.status.replaceAll("_", " ")}</strong>.</div>`);
         } catch (e) {
             console.log(e);
-            showMsg(`<div class="alert alert-danger">Failed to update status.</div>`);
+            const msg = e?.data?.message || e?.text || "Failed to update status.";
+            showMsg(`<div class="alert alert-danger">${msg}</div>`);
         } finally {
             $btn.prop("disabled", false);
         }

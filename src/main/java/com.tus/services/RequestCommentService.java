@@ -37,7 +37,7 @@ public class RequestCommentService {
         MaintenanceRequest request = requestRepo.findById(requestId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
 
-        if (!request.getUnit().equals(user.getUnit())) {
+        if (request.getCreatedBy() == null || !request.getCreatedBy().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to comment on this request");
         }
 
@@ -75,8 +75,8 @@ public class RequestCommentService {
         MaintenanceRequest request = requestRepo.findById(requestId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
 
-        if (!request.getUnit().equals(user.getUnit())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to view comments on this request");
+        if (request.getCreatedBy() == null || !request.getCreatedBy().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to comment on this request");
         }
 
         return commentRepo.findByRequestIdOrderByCreatedAtAsc(requestId).stream()

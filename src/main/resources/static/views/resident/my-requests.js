@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    const flashMsg = sessionStorage.getItem("residentRequestsFlash");
+    if (flashMsg) {
+        document.getElementById("myRequestsMsg").innerHTML =
+            `<div class="alert alert-success">${flashMsg}</div>`;
+        sessionStorage.removeItem("residentRequestsFlash");
+    }
+
     const table = $("#myRequestsTable").DataTable({
         ajax: {
             url: "/api/requests/my",
