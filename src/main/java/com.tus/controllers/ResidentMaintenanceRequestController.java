@@ -119,6 +119,6 @@ public class ResidentMaintenanceRequestController {
 
     @PatchMapping("/{id}/cancel")
     public MaintenanceRequestSummaryDto cancel(@PathVariable Long id, Principal principal) {
-        return cancelRequest.cancelResidentRequest(id, principal.getName());
+        return cancelRequest.cancelRequestAsResident(id, principal.getName());
     }
 }

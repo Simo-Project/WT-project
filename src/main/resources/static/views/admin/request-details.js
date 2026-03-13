@@ -84,6 +84,15 @@ function renderDetails(request) {
             select.appendChild(option);
         });
 
+        const isCancelled = request.status === "CANCELLED";
+        select.disabled = isCancelled;
+        document.getElementById("assignBtn").disabled = isCancelled;
+
+        if (isCancelled) {
+            showMsg(`<div class="alert alert-warning">Cancelled requests cannot be assigned.</div>`);
+        }
+
+
         return request;
     }
 
@@ -102,7 +111,8 @@ function renderDetails(request) {
                 showMsg(`<div class="alert alert-success">Assignment updated successfully.</div>`);
             } catch (e) {
                 console.log(e);
-                showMsg(`<div class="alert alert-danger">Failed to update assignment.</div>`);
+                const msg = e?.data?.message || e?.text || "Failed to update assignment.";
+                showMsg(`<div class="alert alert-danger">${escapeHtml(msg)}</div>`);
             }
         });
 
