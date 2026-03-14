@@ -43,7 +43,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/login.html", "/error",
                         "/styles.css", "/utils.js", "/routes.js",
-                        "/views/**", "/script.js", "/favicon.png").permitAll()
+                        "/views/**", "/script.js", "/favicon.png", "/admin/requests", "/admin/requests/*",
+                        "/resident/create", "/resident/my-requests", "/resident/requests/*").permitAll()
 
                 .requestMatchers("/api/auth/login").permitAll()
 

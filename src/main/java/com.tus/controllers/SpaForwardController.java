@@ -9,6 +9,7 @@ public class SpaForwardController {
     @GetMapping({
             "/admin/requests",
             "/admin/requests/{id}",
+            "/resident/create",
             "/resident/my-requests",
             "/resident/requests/{id}"
     })

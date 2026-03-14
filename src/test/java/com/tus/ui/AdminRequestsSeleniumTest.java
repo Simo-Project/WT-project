@@ -100,8 +100,8 @@ class AdminRequestsSeleniumTest {
 
         driver.get(baseUrl + "/login.html");
 
-        WebElement username = wait.until(d -> d.findElement(By.name("username")));
-        WebElement password = driver.findElement(By.name("password"));
+        WebElement username = wait.until(d -> d.findElement(By.id("username")));
+        WebElement password = driver.findElement(By.id("password"));
 
         username.sendKeys("admin");
         password.sendKeys("admin123");

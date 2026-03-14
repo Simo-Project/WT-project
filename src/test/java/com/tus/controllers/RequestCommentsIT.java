@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class ResidentRequestsIT {
+class RequestCommentsIT {
 
     @Autowired MockMvc mockMvc;
     @Autowired ObjectMapper objectMapper;

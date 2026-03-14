@@ -9,7 +9,21 @@ $(document).ready(function () {
     const table = $("#myRequestsTable").DataTable({
         ajax: {
             url: "/api/requests/my",
-            dataSrc: ""
+            dataSrc: "",
+            beforeSend: function (xhr) {
+                const token = localStorage.getItem("token");
+                if (token) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                }
+            },
+            error: function (xhr) {
+                console.log("myRequestsTable ajax error", xhr.status, xhr.responseText);
+
+                if (xhr.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login.html";
+                }
+            }
         },
         columns: [
             { data: "task" },

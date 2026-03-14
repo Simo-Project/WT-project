@@ -4,7 +4,7 @@ import com.tus.db.models.*;
 import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import io.restassured.RestAssured;
-import io.restassured.filter.session.SessionFilter;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,30 +75,29 @@ class AdminUpdateStatusRestAssuredIT {
         return u;
     }
 
-    private SessionFilter login(String username, String password) {
-        SessionFilter session = new SessionFilter();
-
-        given()
-                .filter(session)
-                .contentType("application/x-www-form-urlencoded")
-                .formParam("username", username)
-                .formParam("password", password)
-                .redirects().follow(false)
+    private String login(String username, String password) {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(Map.of(
+                        "username", username,
+                        "password", password
+                ))
                 .when()
-                .post("/login")
+                .post("/api/auth/login")
                 .then()
-                .statusCode(anyOf(is(302), is(303)));
-
-        return session;
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getString("token");
     }
 
     @Test
     void adminCanPatchStatus_andDbAndListReflectChange() {
-        SessionFilter adminSession = login("admin", "admin123");
+        String adminToken = login("admin", "admin123");
 
         given()
-                .filter(adminSession)
-                .contentType("application/json")
+                .header("Authorization", "Bearer " + adminToken)
+                .contentType(ContentType.JSON)
                 .body(Map.of("status", "IN_PROGRESS"))
                 .when()
                 .patch("/api/admin/requests/{id}/status", requestId)
@@ -111,21 +110,21 @@ class AdminUpdateStatusRestAssuredIT {
         org.junit.jupiter.api.Assertions.assertEquals(RequestStatus.IN_PROGRESS, dbStatus);
 
         given()
-                .filter(adminSession)
+                .header("Authorization", "Bearer " + adminToken)
                 .when()
                 .get("/api/admin/requests")
                 .then()
                 .statusCode(200)
-                .body(String.format("find { it.id == %d }.status", requestId), equalTo("IN_PROGRESS"));
+                .body("find { it.task == 'MR-4 RestAssured status update' }.status", equalTo("IN_PROGRESS"));
     }
 
     @Test
     void residentCannotPatchStatus_forbidden() {
-        SessionFilter residentSession = login("resident", "resident123");
+        String residentToken = login("resident", "resident123");
 
         given()
-                .filter(residentSession)
-                .contentType("application/json")
+                .header("Authorization", "Bearer " + residentToken)
+                .contentType(ContentType.JSON)
                 .body(Map.of("status", "CLOSED"))
                 .when()
                 .patch("/api/admin/requests/{id}/status", requestId)
@@ -135,15 +134,15 @@ class AdminUpdateStatusRestAssuredIT {
 
     @Test
     void adminCannotPatchStatus_whenRequestIsCancelled() {
-        SessionFilter adminSession = login("admin", "admin123");
+        String adminToken = login("admin", "admin123");
 
         MaintenanceRequest request = requestRepo.findById(requestId).orElseThrow();
         request.setStatus(RequestStatus.CANCELLED);
         requestRepo.saveAndFlush(request);
 
         given()
-                .filter(adminSession)
-                .contentType("application/json")
+                .header("Authorization", "Bearer " + adminToken)
+                .contentType(ContentType.JSON)
                 .body(Map.of("status", "IN_PROGRESS"))
                 .when()
                 .patch("/api/admin/requests/{id}/status", requestId)
