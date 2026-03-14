@@ -4,7 +4,7 @@ import com.tus.db.models.*;
 import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import io.restassured.RestAssured;
-import io.restassured.filter.session.SessionFilter;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -69,31 +69,30 @@ class ResidentViewDetailsRestAssuredIT {
         requestRepo.saveAndFlush(other);
     }
 
-    private SessionFilter loginResident() {
-        SessionFilter session = new SessionFilter();
-
-        given()
-                .filter(session)
-                .contentType("application/x-www-form-urlencoded")
-                .formParam("username", "resident")
-                .formParam("password", "resident123")
-                .redirects().follow(false)
+    private String loginResident() {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(Map.of(
+                        "username", "resident",
+                        "password", "resident123"
+                ))
                 .when()
-                .post("/login")
+                .post("/api/auth/login")
                 .then()
-                .statusCode(anyOf(is(302), is(303)));
-
-        return session;
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getString("token");
     }
 
     @Test
     void residentCanCreateAndThenViewDetailsById() {
-        SessionFilter session = loginResident();
+        String residentToken = loginResident();
 
         Long id =
                 given()
-                        .filter(session)
-                        .contentType("application/json")
+                        .header("Authorization", "Bearer " + residentToken)
+                        .contentType(ContentType.JSON)
                         .body(Map.of(
                                 "title", "RestAssured view test",
                                 "category", "PLUMBING",
@@ -111,7 +110,7 @@ class ResidentViewDetailsRestAssuredIT {
                         .getLong("id");
 
         given()
-                .filter(session)
+                .header("Authorization", "Bearer " + residentToken)
                 .when()
                 .get("/api/requests/{id}", id)
                 .then()
@@ -128,7 +127,7 @@ class ResidentViewDetailsRestAssuredIT {
 
     @Test
     void residentCannotViewOtherUnitsRequest() {
-        SessionFilter session = loginResident();
+        String residentToken = loginResident();
 
         Long otherId = requestRepo.findAll().stream()
                 .filter(r -> "Apt 99".equals(r.getUnit()))
@@ -137,7 +136,7 @@ class ResidentViewDetailsRestAssuredIT {
                 .getId();
 
         given()
-                .filter(session)
+                .header("Authorization", "Bearer " + residentToken)
                 .when()
                 .get("/api/requests/{id}", otherId)
                 .then()

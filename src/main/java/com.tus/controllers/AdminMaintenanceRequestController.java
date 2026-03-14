@@ -38,8 +38,8 @@ public class AdminMaintenanceRequestController {
 
     @GetMapping
     public List<MaintenanceRequestSummaryDto> list(
-            @RequestParam Optional<RequestStatus> status,
-            @RequestParam Optional<Priority> priority
+            @RequestParam(name = "status") Optional<RequestStatus> status,
+            @RequestParam(name = "priority") Optional<Priority> priority
     ) {
         return service.list(status, priority);
     }

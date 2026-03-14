@@ -54,37 +54,39 @@ class AdminRequestsRestAssuredIT {
         return mr;
     }
 
-    private Map<String, String> loginAsAdmin() {
+    private String loginAsAdmin() {
         return given()
-                .redirects().follow(false)
-                .contentType(ContentType.URLENC)
-                .formParam("username", "SG")
-                .formParam("password", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                  {
+                    "username": "sg@admin.com",
+                    "password": "admin123"
+                  }
+                  """)
                 .when()
-                .post("/login")
+                .post("/api/auth/login")
                 .then()
-                .statusCode(anyOf(is(302), is(303)))
+                .statusCode(200)
                 .extract()
-                .cookies();
+                .jsonPath()
+                .getString("token");
     }
 
     @Test
-    void unauthenticatedUserIsRedirectedToLogin() {
+    void unauthenticatedUserGets401() {
         given()
-                .redirects().follow(false)
                 .when()
                 .get("/api/admin/requests")
                 .then()
-                .statusCode(anyOf(is(302), is(303)))
-                .header("Location", containsString("/login"));
+                .statusCode(401);
     }
 
     @Test
     void adminCanViewAllRequests() {
-        Map<String, String> cookies = loginAsAdmin();
+        String token = loginAsAdmin();
 
         given()
-                .cookies(cookies)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/api/admin/requests")
                 .then()
@@ -99,16 +101,17 @@ class AdminRequestsRestAssuredIT {
 
     @Test
     void adminCanFilterByStatusAndPriority() {
-        Map<String, String> cookies = loginAsAdmin();
+        String token = loginAsAdmin();
 
         given()
-                .cookies(cookies)
+                .header("Authorization", "Bearer " + token)
                 .queryParam("status", "NEW")
                 .queryParam("priority", "HIGH")
                 .when()
                 .get("/api/admin/requests")
                 .then()
                 .statusCode(200)
+                .contentType(ContentType.JSON)
                 .body("size()", is(1))
                 .body("[0].task", equalTo("Replace smoke detector"))
                 .body("[0].status", equalTo("NEW"))

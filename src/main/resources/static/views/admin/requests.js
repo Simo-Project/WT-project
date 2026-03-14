@@ -16,15 +16,24 @@ $(document).ready(function () {
                 const status = statusFilter.value;
                 const priority = priorityFilter.value;
 
-                if (status) {
-                    d.status = status;
-                }
-
-                if (priority) {
-                    d.priority = priority;
+                if (status) d.status = status;
+                if (priority) d.priority = priority;
+            },
+            dataSrc: "",
+            beforeSend: function (xhr) {
+                const token = localStorage.getItem("token");
+                if (token) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
                 }
             },
-            dataSrc: ""
+            error: function (xhr) {
+                console.log("requestsTable ajax error", xhr.status, xhr.responseText);
+
+                if (xhr.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login.html";
+                }
+            }
         },
         columns: [
             { data: "task" },

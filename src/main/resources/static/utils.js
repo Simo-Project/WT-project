@@ -1,17 +1,17 @@
-async function apiGet(url) {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
+function getToken() {
+    return localStorage.getItem("token");
 }
 
-async function apiPost(url, bodyObj) {
-    const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyObj),
-        credentials: "same-origin"
-    });
+function clearToken() {
+    localStorage.removeItem("token");
+}
 
+function authHeaders() {
+    const token = getToken();
+    return token ? { "Authorization": `Bearer ${token}` } : {};
+}
+
+async function handleResponse(res) {
     const contentType = res.headers.get("content-type") || "";
     let data = null;
     let text = null;
@@ -22,6 +22,12 @@ async function apiPost(url, bodyObj) {
         text = await res.text();
     }
 
+    if (res.status === 401) {
+        clearToken();
+        window.location.href = "/login.html";
+        throw new Error("Unauthorized");
+    }
+
     if (!res.ok) {
         const err = new Error("Request failed");
         err.status = res.status;
@@ -33,30 +39,40 @@ async function apiPost(url, bodyObj) {
     return data ?? text;
 }
 
+async function apiGet(url) {
+    const res = await fetch(url, {
+        headers: {
+            ...authHeaders()
+        }
+    });
+
+    return handleResponse(res);
+}
+
+async function apiPost(url, bodyObj) {
+    const res = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            ...authHeaders()
+        },
+        body: JSON.stringify(bodyObj)
+    });
+
+    return handleResponse(res);
+}
+
 async function apiPatch(url, bodyObj) {
     const res = await fetch(url, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyObj),
-        credentials: "same-origin"
+        headers: {
+            "Content-Type": "application/json",
+            ...authHeaders()
+        },
+        body: JSON.stringify(bodyObj)
     });
 
-    const contentType = res.headers.get("content-type") || "";
-    let data = null;
-    let text = null;
-
-    if (contentType.includes("application/json")) data = await res.json();
-    else text = await res.text();
-
-    if (!res.ok) {
-        const err = new Error("Request failed");
-        err.status = res.status;
-        err.data = data;
-        err.text = text;
-        throw err;
-    }
-
-    return data ?? text;
+    return handleResponse(res);
 }
 
 async function loadView(htmlPath, jsPath) {
@@ -78,7 +94,6 @@ async function loadView(htmlPath, jsPath) {
         s.id = "viewScript";
         s.src = jsPath + "?v=" + Date.now();
 
-        // IMPORTANT: wait until the script loads (so event listeners are attached)
         await new Promise((resolve, reject) => {
             s.onload = resolve;
             s.onerror = () => reject(new Error("Failed to load view script: " + jsPath));
@@ -107,7 +122,6 @@ function buildMenu(user) {
         items.push({ label: "Resident: My Requests", path: "/resident/my-requests" });
     }
 
-    // render
     items.forEach(item => {
         const li = document.createElement("li");
         const a = document.createElement("a");

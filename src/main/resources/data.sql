@@ -1,33 +1,38 @@
 -- ADMIN
 insert into app_user (id, username, password, role, unit)
-values (1, 'SG', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'ADMIN', null);
+values (1, 'sg@admin.com', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'ADMIN', null);
 
 -- RESIDENTS
 insert into app_user (id, username, password, role, unit)
-values (2, 'John Murphy', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 12');
+values (2, 'john.murphy@gmail.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 12');
 
 insert into app_user (id, username, password, role, unit)
-values (3, 'Sarah O''Brien', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 3');
+values (3, 'sarah.obrien@outlook.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 3');
 
 insert into app_user (id, username, password, role, unit)
-values (4, 'Michael Walsh', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 8');
+values (4, 'michael.walsh@yahoo.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 8');
 
 insert into app_user (id, username, password, role, unit)
-values (5, 'Emma Byrne', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 5');
+values (5, 'emma.byrne@hotmail.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 5');
 
 insert into app_user (id, username, password, role, unit)
-values (6, 'David Kelly', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 14');
+values (6, 'david.kelly@icloud.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 14');
 
+insert into app_user (id, username, password, role, unit)
+values (7, 'olivia.smith@gmail.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 2');
+
+insert into app_user (id, username, password, role, unit)
+values (8, 'liam.johnson@aol.com', '$2a$10$UeztABapyv7jcnyG9tZYee6z7xkO6Y.dmf.mqMVHQUbR.mzXpxOlK', 'RESIDENT', 'Apt 4');
 
 -- STAFF
 insert into app_user (id, username, password, role, unit)
-values (7, 'Mark Doyle', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
+values (9, 'Mark Doyle', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
 
 insert into app_user (id, username, password, role, unit)
-values (8, 'Lisa Gallagher', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
+values (10, 'Lisa Gallagher', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
 
 insert into app_user (id, username, password, role, unit)
-values (9, 'Tom Brennan', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
+values (11, 'Tom Brennan', '$2a$10$7nlrdq8b7WjbYgLjUoKcuuTQOt4JaVJEa/raBeXHop6hdRCg3XPMu', 'STAFF', null);
 
 
 
@@ -37,7 +42,7 @@ insert into maintenance_request
 values
     (1, '2026-02-10', 'Replace smoke detector', 'ELECTRICAL',
      'Smoke alarm is beeping / needs replacement', 'NEW', 'HIGH',
-     'Apt 12', 2, 7);
+     'Apt 12', 2, 10);
 
 
 insert into maintenance_request
@@ -53,7 +58,7 @@ insert into maintenance_request
 values
     (3, '2026-02-08', 'Paint hallway wall', 'OTHER',
      'Small patch of paint peeling near door', 'CLOSED', 'LOW',
-     'Apt 8', 4, 8);
+     'Apt 8', 4, 11);
 
 
 insert into maintenance_request
@@ -69,7 +74,7 @@ insert into maintenance_request
 values
     (5, '2026-02-07', 'Bathroom light flickering', 'ELECTRICAL',
      'Light flickers when switched on', 'IN_PROGRESS', 'MEDIUM',
-     'Apt 14', 6, 7);
+     'Apt 14', 6, 10);
 
 
 insert into maintenance_request

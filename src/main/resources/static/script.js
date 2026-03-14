@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "/login.html";
+        });
+    }
+
     try {
         const user = await apiGet("/api/user/me");
 
@@ -8,6 +17,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     } catch (e) {
         document.getElementById("mainView").innerHTML =
-            `<div class="alert alert-danger">Not logged in or user not found. Please go to <a href="/login">/login</a>.</div>`;
+            `<div class="alert alert-danger">Not logged in or user not found. Please go to <a href="/login.html">/login.html</a>.</div>`;
     }
 });
