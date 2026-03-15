@@ -9,9 +9,10 @@ import com.tus.db.models.UserRole;
 import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -36,7 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 class AdminAssignRequestSeleniumTest {
 
-    private static final String DB_NAME = "admin_assign_ui_" + UUID.randomUUID().toString().replace("-", "");
+    private static final String DB_NAME =
+            "admin_assign_ui_" + UUID.randomUUID().toString().replace("-", "");
+
+    private static final String REQUEST_TITLE = "Selenium admin assign request";
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry r) {
@@ -59,8 +63,6 @@ class AdminAssignRequestSeleniumTest {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    private Long requestId;
 
     @BeforeEach
     void setup() {
@@ -97,14 +99,13 @@ class AdminAssignRequestSeleniumTest {
         userRepo.save(staff1);
 
         MaintenanceRequest request = new MaintenanceRequest();
-        request.setTask("Selenium admin assign request");
+        request.setTask(REQUEST_TITLE);
         request.setCategory(RequestCategory.PLUMBING);
         request.setDescription("Created for admin assignment UI test");
         request.setUnit("Apt 12");
         request.setStatus(RequestStatus.NEW);
         request.setPriority(Priority.MEDIUM);
-
-        requestId = requestRepo.saveAndFlush(request).getId();
+        requestRepo.saveAndFlush(request);
     }
 
     @AfterEach
@@ -119,43 +120,55 @@ class AdminAssignRequestSeleniumTest {
     void adminCanAssignStaffFromRequestDetailsPage() {
         String baseUrl = "http://localhost:" + port;
 
-        driver.get(baseUrl + "/login.html");
+        loginAsAdmin(baseUrl);
 
-        WebElement username = wait.until(d -> d.findElement(By.id("username")));
-        WebElement password = driver.findElement(By.id("password"));
-        WebElement submit = driver.findElement(By.cssSelector("button[type='submit']"));
+        WebElement requestRow = waitForRowContaining("#requestsTable tbody tr", REQUEST_TITLE);
+        WebElement viewButton = requestRow.findElement(By.cssSelector("button.view-request"));
+        wait.until(ExpectedConditions.elementToBeClickable(viewButton)).click();
 
-        username.sendKeys("admin");
-        password.sendKeys("admin123");
-        submit.click();
-
-        wait.until(d -> {
-            Object token = ((JavascriptExecutor) d)
-                    .executeScript("return window.localStorage.getItem('token');");
-            return token != null && !token.toString().isBlank();
-        });
-
-        driver.get(baseUrl + "/admin/requests/" + requestId);
+        wait.until(ExpectedConditions.urlContains("/admin/requests/"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("detailsCard")));
 
         WebElement staffSelect = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("staffSelect")));
         wait.until(d -> d.findElements(By.cssSelector("#staffSelect option")).size() > 1);
 
         new Select(staffSelect).selectByVisibleText("staff1");
-        driver.findElement(By.id("assignBtn")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("assignBtn"))).click();
 
         wait.until(ExpectedConditions.textToBePresentInElementLocated(
                 By.id("detailsMsg"),
                 "Assignment updated successfully."
         ));
-
         wait.until(ExpectedConditions.textToBePresentInElementLocated(
                 By.id("detailsCard"),
                 "staff1"
         ));
 
-        driver.get(baseUrl + "/admin/requests/" + requestId);
+        driver.navigate().refresh();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("detailsCard")));
         assertTrue(driver.findElement(By.id("detailsCard")).getText().contains("staff1"));
+    }
+
+    private void loginAsAdmin(String baseUrl) {
+        driver.get(baseUrl + "/login.html");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username"))).sendKeys("admin");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password"))).sendKeys("admin123");
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']"))).click();
+
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.id("userInfo"),
+                "admin (ADMIN"
+        ));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("requestsTable")));
+        wait.until(d -> d.findElements(By.cssSelector("#requestsTable tbody tr")).size() > 0);
+    }
+
+    private WebElement waitForRowContaining(String rowCss, String text) {
+        return wait.until(d -> d.findElements(By.cssSelector(rowCss)).stream()
+                .filter(row -> row.getText() != null && row.getText().contains(text))
+                .findFirst()
+                .orElse(null));
     }
 }
