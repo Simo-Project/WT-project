@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+tools {
+  jdk 'jdk23'
+}
+
   options {
     timestamps()
     disableConcurrentBuilds()
