@@ -2,7 +2,7 @@ pipeline {
   agent any
 
 tools {
-  jdk 'jdk23'
+  jdk 'JDK-23'
 }
 
   options {
