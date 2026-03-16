@@ -1,10 +1,8 @@
 package com.tus.api;
 
-import com.tus.db.models.MaintenanceRequest;
-import com.tus.db.models.Priority;
-import com.tus.db.models.RequestStatus;
+import com.tus.db.models.*;
+import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
-import com.tus.db.models.RequestCategory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -24,11 +26,26 @@ import static org.hamcrest.Matchers.*;
 @ActiveProfiles("test")
 class AdminRequestsRestAssuredIT {
 
+    private static final String DB_NAME = "admin_requests_" + UUID.randomUUID().toString().replace("-", "");
+
+    @DynamicPropertySource
+    static void overrideProps(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () ->
+                "jdbc:h2:mem:" + DB_NAME + ";MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false"
+        );
+    }
+
     @LocalServerPort
     int port;
 
     @Autowired
     MaintenanceRequestRepository repo;
+
+    @Autowired
+    AppUserRepository userRepo;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setup() {
@@ -36,10 +53,22 @@ class AdminRequestsRestAssuredIT {
         RestAssured.port = port;
 
         repo.deleteAll();
+        userRepo.deleteAll();
+
+        userRepo.save(makeUser("admin", "admin123", UserRole.ADMIN, null));
 
         repo.save(make("Replace smoke detector", RequestStatus.NEW, Priority.HIGH, "Apt 12", LocalDate.of(2026, 2, 10)));
         repo.save(make("Fix broken air vent", RequestStatus.IN_PROGRESS, Priority.MEDIUM, "Apt 3", LocalDate.of(2026, 2, 9)));
         repo.save(make("Paint", RequestStatus.CLOSED, Priority.LOW, "Apt 8", LocalDate.of(2026, 2, 8)));
+    }
+
+    private AppUser makeUser(String username, String rawPassword, UserRole role, String unit) {
+        AppUser u = new AppUser();
+        u.setUsername(username);
+        u.setPassword(passwordEncoder.encode(rawPassword));
+        u.setRole(role);
+        u.setUnit(unit);
+        return u;
     }
 
     private MaintenanceRequest make(String task, RequestStatus status, Priority priority, String unit, LocalDate createdOn) {
@@ -59,7 +88,7 @@ class AdminRequestsRestAssuredIT {
                 .contentType(ContentType.JSON)
                 .body("""
                   {
-                    "username": "sg@admin.com",
+                    "username": "admin",
                     "password": "admin123"
                   }
                   """)
