@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class ResidentCreateRequestSeleniumTest {
+class ResidentViewRequestsSeleniumTest {
 
     private static final String DB_NAME =
             "resident_ui_" + UUID.randomUUID().toString().replace("-", "");
@@ -96,26 +96,33 @@ class ResidentCreateRequestSeleniumTest {
     }
 
     @Test
-    void residentCanCreateRequestAndSeeItInMyRequestsTable() {
-        String uniqueTitle = "Selenium resident create " + UUID.randomUUID();
+    void residentCanOpenDetailsFromMyRequestsAndAddComment() {
+        Long requestId = seedResidentRequest("Selenium resident details request");
+        String comment = "Selenium comment " + UUID.randomUUID();
 
-        openResidentRoute("/resident/create");
+        openResidentRoute("/resident/my-requests");
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("title"))).sendKeys(uniqueTitle);
-        new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("category"))))
-                .selectByValue("PLUMBING");
-        driver.findElement(By.id("description")).sendKeys("Created by Selenium UI test");
+        waitForRowContaining("#myRequestsTable tbody tr", "Selenium resident details request");
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button.view-request[data-id='" + requestId + "']")
+        )).click();
 
-        WebElement form = driver.findElement(By.id("createRequestForm"));
-        driver.findElement(By.cssSelector("#createRequestForm button[type='submit']")).click();
+        wait.until(ExpectedConditions.urlContains("/resident/requests/" + requestId));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.id("detailsCard"),
+                "Selenium resident details request"
+        ));
 
-        wait.until(ExpectedConditions.stalenessOf(form));
-        wait.until(ExpectedConditions.urlContains("/resident/my-requests"));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("myRequestsTable")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("commentText"))).sendKeys(comment);
+        driver.findElement(By.cssSelector("#commentForm button[type='submit']")).click();
 
-        WebElement row = waitForRowContaining("#myRequestsTable tbody tr", uniqueTitle);
-        assertTrue(row.getText().contains(uniqueTitle));
-        assertTrue(row.getText().contains("Apt 12"));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.id("detailsMsg"),
+                "Comment added successfully."
+        ));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("commentsList"), comment));
+
+        assertTrue(driver.findElement(By.id("detailsCard")).getText().contains("Apt 12"));
     }
 
     private void seedData() {

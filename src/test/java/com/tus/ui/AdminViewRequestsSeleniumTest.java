@@ -1,13 +1,23 @@
 package com.tus.ui;
 
-import com.tus.db.models.*;
+import com.tus.db.models.AppUser;
+import com.tus.db.models.MaintenanceRequest;
 import com.tus.db.models.Priority;
+import com.tus.db.models.RequestCategory;
+import com.tus.db.models.RequestStatus;
+import com.tus.db.models.UserRole;
 import com.tus.db.repos.AppUserRepository;
 import com.tus.db.repos.MaintenanceRequestRepository;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,9 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class AdminRequestsSeleniumTest {
+class AdminViewRequestsSeleniumTest {
 
     private static final String DB_NAME = "admin_ui_" + UUID.randomUUID();
+    private static final String SEEDED_TITLE = "Seeded admin UI request";
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry r) {
@@ -52,7 +63,7 @@ class AdminRequestsSeleniumTest {
 
     @BeforeEach
     void setup() {
-        ensureAdminAndRequestsExist();
+        seedData();
 
         WebDriverManager.chromedriver().setup();
 
@@ -66,24 +77,25 @@ class AdminRequestsSeleniumTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    private void ensureAdminAndRequestsExist() {
-        AppUser admin = userRepo.findByUsername("admin").orElseGet(AppUser::new);
+    private void seedData() {
+        requestRepo.deleteAll();
+        userRepo.deleteAll();
+
+        AppUser admin = new AppUser();
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin123"));
         admin.setRole(UserRole.ADMIN);
         admin.setUnit(null);
         userRepo.save(admin);
 
-        if (requestRepo.count() == 0) {
-            MaintenanceRequest r = new MaintenanceRequest();
-            r.setTask("Seeded admin UI request");
-            r.setCategory(RequestCategory.PLUMBING);
-            r.setDescription("Created by Selenium admin test setup");
-            r.setUnit("A1");
-            r.setStatus(RequestStatus.NEW);
-            r.setPriority(Priority.MEDIUM);
-            requestRepo.save(r);
-        }
+        MaintenanceRequest request = new MaintenanceRequest();
+        request.setTask(SEEDED_TITLE);
+        request.setCategory(RequestCategory.PLUMBING);
+        request.setDescription("Created by Selenium admin test setup");
+        request.setUnit("A1");
+        request.setStatus(RequestStatus.NEW);
+        request.setPriority(Priority.MEDIUM);
+        requestRepo.save(request);
     }
 
     @AfterEach
@@ -100,18 +112,26 @@ class AdminRequestsSeleniumTest {
 
         driver.get(baseUrl + "/login.html");
 
-        WebElement username = wait.until(d -> d.findElement(By.id("username")));
-        WebElement password = driver.findElement(By.id("password"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username"))).sendKeys("admin");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password"))).sendKeys("admin123");
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']"))).click();
 
-        username.sendKeys("admin");
-        password.sendKeys("admin123");
-        password.submit();
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.id("userInfo"),
+                "admin (ADMIN"
+        ));
 
-        wait.until(d -> d.findElements(By.cssSelector("#requestsTable")).size() > 0);
-
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("requestsTable")));
         wait.until(d -> d.findElements(By.cssSelector("#requestsTable tbody tr")).size() > 0);
 
-        int rowCount = driver.findElements(By.cssSelector("#requestsTable tbody tr")).size();
-        assertTrue(rowCount > 0, "Expected DataTable to show at least 1 request row");
+        WebElement requestRow = waitForRowContaining("#requestsTable tbody tr", SEEDED_TITLE);
+        assertTrue(requestRow.getText().contains(SEEDED_TITLE));
+    }
+
+    private WebElement waitForRowContaining(String rowCss, String text) {
+        return wait.until(d -> d.findElements(By.cssSelector(rowCss)).stream()
+                .filter(row -> row.getText() != null && row.getText().contains(text))
+                .findFirst()
+                .orElse(null));
     }
 }
