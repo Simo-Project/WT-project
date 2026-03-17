@@ -1,3 +1,4 @@
+(() => {
 $(document).ready(function () {
     const STATUSES = ["NEW", "IN_PROGRESS", "AWAITING_PARTS", "CLOSED"];
 
@@ -118,3 +119,4 @@ $(document).ready(function () {
         }
     });
 });
+})();

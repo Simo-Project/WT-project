@@ -1,3 +1,4 @@
+(() => {
 function showMsg(html) {
     document.getElementById("residentMsg").innerHTML = html;
 }
@@ -37,3 +38,4 @@ document.getElementById("createRequestForm").addEventListener("submit", async (e
   </div>`);
     }
 });
+})();

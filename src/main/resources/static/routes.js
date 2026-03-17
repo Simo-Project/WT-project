@@ -1,3 +1,4 @@
+(() => {
 function initRoutes(user) {
     const router = new Navigo("/");
     window.router = router;
@@ -32,3 +33,5 @@ function initRoutes(user) {
 
     router.resolve();
 }
+    window.initRoutes = initRoutes;
+})();

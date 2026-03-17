@@ -1,3 +1,4 @@
+(() => {
 $(document).ready(function () {
     const flashMsg = sessionStorage.getItem("residentRequestsFlash");
     if (flashMsg) {
@@ -51,3 +52,4 @@ $(document).ready(function () {
         window.router.navigate(`/resident/requests/${id}`);
     });
 });
+})();

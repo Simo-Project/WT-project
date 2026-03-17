@@ -1,3 +1,4 @@
+(() => {
 document.addEventListener("DOMContentLoaded", async () => {
     const logoutBtn = document.getElementById("logoutBtn");
 
@@ -20,3 +21,4 @@ document.addEventListener("DOMContentLoaded", async () => {
             `<div class="alert alert-danger">Not logged in or user not found. Please go to <a href="/login.html">/login.html</a>.</div>`;
     }
 });
+})();

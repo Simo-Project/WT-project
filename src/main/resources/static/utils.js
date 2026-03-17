@@ -1,3 +1,4 @@
+(() => {
 function getToken() {
     return localStorage.getItem("token");
 }
@@ -136,3 +137,10 @@ function buildMenu(user) {
         menu.appendChild(li);
     });
 }
+    window.apiGet = apiGet;
+    window.apiPost = apiPost;
+    window.apiPatch = apiPatch;
+    window.loadView = loadView;
+    window.setUserInfoText = setUserInfoText;
+    window.buildMenu = buildMenu;
+})();

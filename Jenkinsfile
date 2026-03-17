@@ -33,22 +33,20 @@ tools {
      steps {
        script {
          if (isUnix()) {
-           // Prefer Maven Wrapper if present
+
            if (fileExists('mvnw')) {
              sh 'chmod +x mvnw'
              env.MVN = './mvnw'
            } else {
-             // Ensure Homebrew paths are visible to Jenkins
+
              env.PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
 
-             // Try PATH first
              def mvnPath = sh(returnStdout: true, script: "command -v mvn || true").trim()
 
-             // Fall back to common absolute paths
              if (!mvnPath) {
                def candidates = [
-                 "/opt/homebrew/bin/mvn",  // Apple Silicon brew
-                 "/usr/local/bin/mvn",     // Intel brew
+                 "/opt/homebrew/bin/mvn",
+                 "/usr/local/bin/mvn",
                  "/usr/bin/mvn"
                ]
                for (c in candidates) {
@@ -105,11 +103,11 @@ tools {
       when { expression { return params.RUN_UI_TESTS } }
       steps {
         script {
-          // Try to locate Chrome/Chromium and pass it explicitly to Selenium via webdriver.chrome.bin
+
           def chromeBin = ''
 
           if (isUnix()) {
-            // macOS common paths + some Linux common paths
+
             def candidates = [
               "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
               "${env.HOME}/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -123,13 +121,13 @@ tools {
               if (status == 0) { chromeBin = c; break }
             }
           } else {
-            // Best-effort Windows default locations (adjust if needed)
+
             def candidates = [
             "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
               "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
               "C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe"
             ]
-            // fileExists checks workspace; so just set and let Selenium fail clearly if wrong
+
             chromeBin = candidates[0]
           }
 
@@ -155,7 +153,7 @@ Install Chrome, or adjust the path list in Jenkinsfile, or run UI tests in a Sel
       when { expression { return params.RUN_SONAR } }
       steps {
         script {
-          // Requires SonarQube Scanner + server config in Jenkins
+
           withSonarQubeEnv(params.SONARQUBE_ENV) {
             if (isUnix()) {
               sh "${env.MVN} ${env.MAVEN_ARGS} sonar:sonar"
@@ -170,16 +168,14 @@ Install Chrome, or adjust the path list in Jenkinsfile, or run UI tests in a Sel
 
   post {
     always {
-      // Publish test reports (don’t fail the post step if one set isn’t present)
+
       junit testResults: '**/target/surefire-reports/*.xml, **/target/failsafe-reports/*.xml',
             allowEmptyResults: true
 
-      // JaCoCo: pick up exec files from unit + IT runs if present
       jacoco execPattern: '**/target/*.exec',
              classPattern: '**/target/classes',
              sourcePattern: '**/src/main/java'
 
-      // Optional: archive HTML report if your Maven build generates it (common)
       archiveArtifacts artifacts: 'target/site/jacoco/**/*', allowEmptyArchive: true
     }
   }
