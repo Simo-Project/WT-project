@@ -146,7 +146,12 @@ class AdminAssignRequestSeleniumTest {
 
         driver.navigate().refresh();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("detailsCard")));
+        wait.until(ExpectedConditions.urlContains("/admin/requests/"));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.id("detailsCard"),
+                "staff1"
+        ));
+
         assertTrue(driver.findElement(By.id("detailsCard")).getText().contains("staff1"));
     }
 
