@@ -75,18 +75,19 @@ public class AdminMaintenanceRequestController {
 
         List<RequestCommentDto> comments = commentService.getCommentsForAdmin(id);
 
-        return new MaintenanceRequestDetailsDto(
-                r.getId(),
-                r.getCreatedOn(),
-                r.getTask(),
-                r.getCategory(),
-                r.getDescription(),
-                r.getStatus(),
-                r.getPriority(),
-                r.getUnit(),
-                r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null,
-                comments
-        );
+        MaintenanceRequestDetailsDto dto = new MaintenanceRequestDetailsDto();
+        dto.setId(r.getId());
+        dto.setCreatedOn(r.getCreatedOn());
+        dto.setTask(r.getTask());
+        dto.setCategory(r.getCategory());
+        dto.setDescription(r.getDescription());
+        dto.setStatus(r.getStatus());
+        dto.setPriority(r.getPriority());
+        dto.setUnit(r.getUnit());
+        dto.setAssignedToUsername(r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null);
+        dto.setComments(comments);
+
+        return dto;
     }
 
     @PostMapping("/{id}/comments")

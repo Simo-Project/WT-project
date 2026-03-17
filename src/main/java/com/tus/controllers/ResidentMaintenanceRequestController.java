@@ -27,6 +27,7 @@ public class ResidentMaintenanceRequestController {
     private final AppUserRepository users;
     private final RequestCommentService commentService;
     private final MaintenanceRequestService cancelRequest;
+    private static final String USER_NOT_FOUND = "User not found";
 
     public ResidentMaintenanceRequestController(MaintenanceRequestRepository requests,
                                                 AppUserRepository users, RequestCommentService commentService, MaintenanceRequestService cancelRequest) {
@@ -41,7 +42,7 @@ public class ResidentMaintenanceRequestController {
                                                Principal principal) {
 
         AppUser user = users.findByUsername(principal.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
 
 
         MaintenanceRequest mr = new MaintenanceRequest();
@@ -67,7 +68,7 @@ public class ResidentMaintenanceRequestController {
     @GetMapping("/my")
     public List<MaintenanceRequestSummaryDto> myRequests(Principal principal) {
         AppUser user = users.findByUsername(principal.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
 
         return requests.findByCreatedByUsername(user.getUsername()).stream()
                 .map(r -> new MaintenanceRequestSummaryDto(
@@ -80,7 +81,7 @@ public class ResidentMaintenanceRequestController {
     public MaintenanceRequestDetailsDto getOne(@PathVariable Long id, Principal principal) {
 
         AppUser user = users.findByUsername(principal.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, USER_NOT_FOUND));
 
         MaintenanceRequest r = requests.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
@@ -91,18 +92,19 @@ public class ResidentMaintenanceRequestController {
 
         List<RequestCommentDto> comments = commentService.getCommentsForResident(id, principal.getName());
 
-        return new MaintenanceRequestDetailsDto(
-                r.getId(),
-                r.getCreatedOn(),
-                r.getTask(),
-                r.getCategory(),
-                r.getDescription(),
-                r.getStatus(),
-                r.getPriority(),
-                r.getUnit(),
-                r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null,
-                comments
-        );
+        MaintenanceRequestDetailsDto dto = new MaintenanceRequestDetailsDto();
+        dto.setId(r.getId());
+        dto.setCreatedOn(r.getCreatedOn());
+        dto.setTask(r.getTask());
+        dto.setCategory(r.getCategory());
+        dto.setDescription(r.getDescription());
+        dto.setStatus(r.getStatus());
+        dto.setPriority(r.getPriority());
+        dto.setUnit(r.getUnit());
+        dto.setAssignedToUsername(r.getAssignedTo() != null ? r.getAssignedTo().getUsername() : null);
+        dto.setComments(comments);
+
+        return dto;
     }
 
     @PostMapping("/{id}/comments")

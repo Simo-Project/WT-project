@@ -16,6 +16,7 @@ public class MaintenanceRequestService {
 
     private final MaintenanceRequestRepository repo;
     private final AppUserRepository userRepo;
+    private static final String REQUEST_NOT_FOUND = "Request not found";
 
     public MaintenanceRequestService(MaintenanceRequestRepository repo, AppUserRepository userRepo ) {
         this.repo = repo;
@@ -44,7 +45,7 @@ public class MaintenanceRequestService {
 
     public MaintenanceRequestSummaryDto updateStatus(Long id, RequestStatus newStatus) {
         MaintenanceRequest r = repo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         if (r.getStatus() == RequestStatus.CANCELLED && newStatus != RequestStatus.CANCELLED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Cancelled requests cannot be updated");
@@ -66,7 +67,7 @@ public class MaintenanceRequestService {
 
     public MaintenanceRequestSummaryDto assignRequest(Long requestId, Long staffUserId) {
         MaintenanceRequest r = repo.findById(requestId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         if (r.getStatus() == RequestStatus.CANCELLED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Cannot assign a cancelled request");
@@ -103,7 +104,7 @@ public class MaintenanceRequestService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
 
         MaintenanceRequest request = repo.findById(requestId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         if (request.getCreatedBy() == null || !resident.getId().equals(request.getCreatedBy().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only cancel your own requests");

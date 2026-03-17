@@ -45,13 +45,6 @@ public class MaintenanceRequest {
 
     public MaintenanceRequest() {}
 
-    public MaintenanceRequest(String task, RequestStatus status, Priority priority, String unit, String createdOn) {
-        this.task = task;
-        this.status = status;
-        this.priority = priority;
-        this.unit = unit;
-    }
-
     @PrePersist
     public void onCreate() {
         if (this.status == null) this.status = RequestStatus.NEW;

@@ -1,6 +1,5 @@
 package com.tus.dtos;
 
-import com.tus.db.models.AppUser;
 import com.tus.db.models.Priority;
 import com.tus.db.models.RequestCategory;
 import com.tus.db.models.RequestStatus;
@@ -20,19 +19,7 @@ public class MaintenanceRequestDetailsDto {
     private String assignedToUsername;
     private List<RequestCommentDto> comments;
 
-    public MaintenanceRequestDetailsDto(Long id, LocalDate createdOn, String task,
-                                        RequestCategory category, String description,
-                                        RequestStatus status, Priority priority, String unit, String assignedToUsername,  List<RequestCommentDto> comments) {
-        this.id = id;
-        this.createdOn = createdOn;
-        this.task = task;
-        this.category = category;
-        this.description = description;
-        this.status = status;
-        this.priority = priority;
-        this.unit = unit;
-        this.assignedToUsername = assignedToUsername;
-        this.comments = comments;
+    public MaintenanceRequestDetailsDto() {
     }
 
     public Long getId() { return id; }
@@ -45,4 +32,15 @@ public class MaintenanceRequestDetailsDto {
     public String getUnit() { return unit; }
     public String getAssignedToUsername() { return assignedToUsername; }
     public List<RequestCommentDto> getComments() { return comments; }
+
+    public void setId(Long id) { this.id = id; }
+    public void setCreatedOn(LocalDate createdOn) { this.createdOn = createdOn; }
+    public void setTask(String task) { this.task = task; }
+    public void setCategory(RequestCategory category) { this.category = category; }
+    public void setDescription(String description) { this.description = description; }
+    public void setStatus(RequestStatus status) { this.status = status; }
+    public void setPriority(Priority priority) { this.priority = priority; }
+    public void setUnit(String unit) { this.unit = unit; }
+    public void setAssignedToUsername(String assignedToUsername) { this.assignedToUsername = assignedToUsername; }
+    public void setComments(List<RequestCommentDto> comments) { this.comments = comments; }
 }

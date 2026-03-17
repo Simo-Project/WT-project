@@ -21,6 +21,8 @@ public class RequestCommentService {
     private final RequestCommentRepository commentRepo;
     private final MaintenanceRequestRepository requestRepo;
     private final AppUserRepository userRepo;
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String REQUEST_NOT_FOUND = "Request not found";
 
     public RequestCommentService(RequestCommentRepository commentRepo,
                                  MaintenanceRequestRepository requestRepo,
@@ -32,10 +34,10 @@ public class RequestCommentService {
 
     public RequestCommentDto addResidentComment(Long requestId, String username, String text) {
         AppUser user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, USER_NOT_FOUND));
 
         MaintenanceRequest request = requestRepo.findById(requestId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         if (request.getCreatedBy() == null || !request.getCreatedBy().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to comment on this request");
@@ -51,14 +53,14 @@ public class RequestCommentService {
 
     public RequestCommentDto addAdminComment(Long requestId, String username, String text) {
         AppUser user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, USER_NOT_FOUND));
 
         if (user.getRole() != UserRole.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only administrators can comment here");
         }
 
         MaintenanceRequest request = requestRepo.findById(requestId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         RequestComment comment = new RequestComment();
         comment.setRequest(request);
@@ -70,10 +72,10 @@ public class RequestCommentService {
 
     public List<RequestCommentDto> getCommentsForResident(Long requestId, String username) {
         AppUser user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, USER_NOT_FOUND));
 
         MaintenanceRequest request = requestRepo.findById(requestId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         if (request.getCreatedBy() == null || !request.getCreatedBy().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to comment on this request");
@@ -86,7 +88,7 @@ public class RequestCommentService {
 
     public List<RequestCommentDto> getCommentsForAdmin(Long requestId) {
         MaintenanceRequest request = requestRepo.findById(requestId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, REQUEST_NOT_FOUND));
 
         return commentRepo.findByRequestIdOrderByCreatedAtAsc(request.getId()).stream()
                 .map(RequestCommentMapper::toDto)
