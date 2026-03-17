@@ -5,6 +5,10 @@ import com.tus.dtos.MaintenanceRequestSummaryDto;
 
 public class MaintenanceRequestMapper {
 
+    private MaintenanceRequestMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static MaintenanceRequestSummaryDto toSummary(MaintenanceRequest mr) {
         return new MaintenanceRequestSummaryDto(
                 mr.getId(),

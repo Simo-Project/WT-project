@@ -6,6 +6,7 @@ public class LoginRequestDto {
     private String password;
 
     public LoginRequestDto() {
+        // Required by Jackson for JSON deserialization.
     }
 
     public String getUsername() {

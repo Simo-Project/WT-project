@@ -1,6 +1,5 @@
 package com.tus.dtos;
 
-import com.tus.db.models.AppUser;
 import com.tus.db.models.Priority;
 import com.tus.db.models.RequestStatus;
 

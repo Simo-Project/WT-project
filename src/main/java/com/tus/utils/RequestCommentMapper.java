@@ -5,6 +5,10 @@ import com.tus.dtos.RequestCommentDto;
 
 public class RequestCommentMapper {
 
+    private RequestCommentMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static RequestCommentDto toDto(RequestComment comment) {
         return new RequestCommentDto(
                 comment.getId(),
