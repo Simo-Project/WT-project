@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69d6680a-d08e-4c1e-9f71-13b6b7716de4" name="Changes" comment="Added Tests">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="69d6680a-d08e-4c1e-9f71-13b6b7716de4" name="Changes" comment="Sonarqube Quality Gate improvements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com.tus/controllers/ResidentMaintenanceRequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com.tus/controllers/ResidentMaintenanceRequestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com.tus/db/models/MaintenanceRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com.tus/db/models/MaintenanceRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com.tus/db/models/RequestStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com.tus/db/models/RequestStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com.tus/db/repos/MaintenanceRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com.tus/db/repos/MaintenanceRequestRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com.tus/services/MaintenanceRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com.tus/services/MaintenanceRequestService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com.tus/services/RequestCommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com.tus/services/RequestCommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/views/resident/request-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/views/resident/request-details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/views/resident/request-details.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/views/resident/request-details.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,91 +37,115 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="sonarqube-quality-gate" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Simo-Project"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Simo-Project&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="39RgD6iEOzyfouRtk61cQfPStjY" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "JUnit.AdminRequestsRestAssuredIT.executor": "Run",
-    "JUnit.AdminRequestsSeleniumTest (1).executor": "Run",
-    "JUnit.AdminRequestsSeleniumTest.executor": "Run",
-    "JUnit.AdminUpdateStatusRestAssuredIT.executor": "Run",
-    "JUnit.CreateMaintenanceRequestDtoValidationUnitTest.executor": "Run",
-    "JUnit.MaintenanceRequestDefaultsUnitTest.executor": "Run",
-    "JUnit.MaintenanceRequestMapperUnitTest.executor": "Run",
-    "JUnit.MaintenanceRequestServiceIntegrationTest.executor": "Run",
-    "JUnit.MaintenanceRequestServiceUpdateStatusIT.executor": "Run",
-    "JUnit.MaintenanceRequestUnitTest.executor": "Run",
-    "JUnit.ResidentCreateRequestSeleniumTest.executor": "Run",
-    "JUnit.ResidentCreateRequestSeleniumTest.residentCanCreateRequestAndSeeItInMyRequestsTable.executor": "Run",
-    "JUnit.ResidentRequestsIT.executor": "Run",
-    "JUnit.ResidentViewDetailsRestAssuredIT.executor": "Run",
-    "JUnit.java in WT-project.executor": "Run",
-    "JUnit.tus in WT-project.executor": "Run",
-    "JUnit.ui in WT-project.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.Main.executor": "Run",
-    "git-widget-placeholder": "feature/us7-resident-cancel-request",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.AdminAssignRequestRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminAssignRequestSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminRequestsRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminRequestsSeleniumTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminRequestsSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminUpdateStatusRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AdminViewRequestsSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateCommentDtoValidationUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateMaintenanceRequestDtoValidationUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DbUserDetailsServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GlobalExceptionHandlerUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.KarateJwtIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestDefaultsUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestMapperUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestServiceIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestServiceUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestServiceUpdateStatusIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MaintenanceRequestUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RequestCommentDefaultsUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RequestCommentMapperUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RequestCommentServiceUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RequestCommentsIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentCreateRequestSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentCreateRequestSeleniumTest.residentCanCreateRequestAndSeeItInMyRequestsTable.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentPagesSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentRequestDetailsSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentRequestsIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentViewDetailsRestAssuredIT.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentViewRequestDetailsSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentViewRequestDetatilsSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ResidentViewRequestSeleniumTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UpdateRequestStatusDtoValidationUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserControllerUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.java in WT-project.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.tus in WT-project.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ui in WT-project.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.Main.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static" />
       <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\views\res" />
       <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\views\resident" />
       <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\views" />
       <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static\admin" />
-      <recent name="C:\Users\Simo\IdeaProjects\WT-project\src\main\resources\static" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.tus" />
+      <recent name="com.tus.controllers" />
       <recent name="com.tus.db.models" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.Main">
-    <configuration name="ResidentCreateRequestSeleniumTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.java in WT-project">
+    <configuration name="AdminRequestsRestAssuredIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="WT-project" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.tus.ui.*" />
+          <option name="PATTERN" value="com.tus.api.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.tus.ui" />
-      <option name="MAIN_CLASS_NAME" value="com.tus.ui.ResidentCreateRequestSeleniumTest" />
+      <option name="PACKAGE_NAME" value="com.tus.api" />
+      <option name="MAIN_CLASS_NAME" value="com.tus.api.AdminRequestsRestAssuredIT" />
       <option name="TEST_OBJECT" value="class" />
+      <dir value="$PROJECT_DIR$/src/test/java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -188,9 +202,9 @@
       <list>
         <item itemvalue="JUnit.java in WT-project" />
         <item itemvalue="JUnit.ui in WT-project" />
+        <item itemvalue="JUnit.AdminRequestsRestAssuredIT" />
         <item itemvalue="JUnit.tus in WT-project" />
         <item itemvalue="JUnit.ResidentCreateRequestSeleniumTest.residentCanCreateRequestAndSeeItInMyRequestsTable" />
-        <item itemvalue="JUnit.ResidentCreateRequestSeleniumTest" />
       </list>
     </recent_temporary>
   </component>
@@ -228,6 +242,15 @@
       <workItem from="1772362808138" duration="22142000" />
       <workItem from="1772403369046" duration="13000" />
       <workItem from="1772490377582" duration="300000" />
+      <workItem from="1773482057756" duration="20265000" />
+      <workItem from="1773575888552" duration="3212000" />
+      <workItem from="1773598363098" duration="12750000" />
+      <workItem from="1773653582549" duration="2396000" />
+      <workItem from="1773677287871" duration="7059000" />
+      <workItem from="1773698266685" duration="2000" />
+      <workItem from="1773745820944" duration="11462000" />
+      <workItem from="1773762710213" duration="12376000" />
+      <workItem from="1773906948438" duration="1047000" />
     </task>
     <task id="LOCAL-00001" summary="Base frame taken from MASE (WT)">
       <option name="closed" value="true" />
@@ -309,7 +332,87 @@
       <option name="project" value="LOCAL" />
       <updated>1772389908780</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Visual changes">
+      <option name="closed" value="true" />
+      <created>1773444527384</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773444527384</updated>
+    </task>
+    <task id="LOCAL-00012" summary="[WIP] US8 Changing to JWT authentication">
+      <option name="closed" value="true" />
+      <created>1773489586984</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1773489586984</updated>
+    </task>
+    <task id="LOCAL-00013" summary="[WIP] Fixed previous tests to match JWT">
+      <option name="closed" value="true" />
+      <created>1773502952882</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1773502952882</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Refactor of Tests">
+      <option name="closed" value="true" />
+      <created>1773525804254</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773525804254</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Refactor of Tests&#10;Added Karate Tets&#10;Added README">
+      <option name="closed" value="true" />
+      <created>1773610397012</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1773610397012</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Refactor of Tests">
+      <option name="closed" value="true" />
+      <created>1773695733333</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1773695733333</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Test edit for Jenkins">
+      <option name="closed" value="true" />
+      <created>1773696535744</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1773696535744</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Cleanup">
+      <option name="closed" value="true" />
+      <created>1773768996951</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1773768996951</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Sonarqube Quality Gate improvements">
+      <option name="closed" value="true" />
+      <created>1773779260530</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1773779260530</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Sonarqube Quality Gate improvements">
+      <option name="closed" value="true" />
+      <created>1773779937194</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1773779937194</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,13 +435,21 @@
     <MESSAGE value="[WIP] Add Resident + request" />
     <MESSAGE value="[WIP] Added Resident Request Viewer" />
     <MESSAGE value="Added Tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Tests" />
+    <MESSAGE value="Visual changes" />
+    <MESSAGE value="[WIP] US8 Changing to JWT authentication" />
+    <MESSAGE value="[WIP] Fixed previous tests to match JWT" />
+    <MESSAGE value="Refactor of Tests&#10;Added Karate Tets&#10;Added README" />
+    <MESSAGE value="Refactor of Tests" />
+    <MESSAGE value="Test edit for Jenkins" />
+    <MESSAGE value="Cleanup" />
+    <MESSAGE value="Sonarqube Quality Gate improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sonarqube Quality Gate improvements" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/WT_project$java_in_WT_project.ic" NAME="java in WT-project Coverage Results" MODIFIED="1772377294591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/WT_project$java_in_WT_project.ic" NAME="java in WT-project Coverage Results" MODIFIED="1773676688756" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

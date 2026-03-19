@@ -17,7 +17,6 @@ tools {
   }
 
   environment {
-    // Avoids noisy downloads in console
     PATH = "/opt/homebrew/bin:${PATH}"
     MAVEN_ARGS = '-B -ntp'
   }
@@ -86,8 +85,6 @@ tools {
     stage('Build + Test (non-UI)') {
       steps {
         script {
-          // Exclude Selenium tests by default so CI doesn't fail without Chrome.
-          // Note: -Dtest excludes apply to Surefire; -Dit.test applies to Failsafe.
           def excludeUi = "-Dtest='!*SeleniumTest' -Dit.test='!*SeleniumTest'"
 
           if (isUnix()) {
@@ -159,6 +156,19 @@ Install Chrome, or adjust the path list in Jenkinsfile, or run UI tests in a Sel
               sh "${env.MVN} ${env.MAVEN_ARGS} sonar:sonar"
             } else {
               bat "${env.MVN} ${env.MAVEN_ARGS} sonar:sonar"
+            }
+          }
+        }
+      }
+    }
+    stage('Quality Gate') {
+      when { expression { return params.RUN_SONAR } }
+      steps {
+        timeout(time: 5, unit: 'MINUTES') {
+          script {
+            def qg = waitForQualityGate()
+            if (qg.status != 'OK') {
+              error "Pipeline aborted because Quality Gate was: ${qg.status}"
             }
           }
         }
