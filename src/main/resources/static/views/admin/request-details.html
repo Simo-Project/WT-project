@@ -1,0 +1,52 @@
+<h2>Request Details</h2>
+
+<div id="detailsMsg" class="mb-3"></div>
+
+<div id="detailsCard" class="card mb-3">
+    <div class="card-body">
+        <div class="text-muted">Loading...</div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>Assignment</h5>
+
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <select id="staffSelect" class="form-select">
+                    <option value="">Unassigned</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button id="assignBtn" class="btn btn-primary">Save Assignment</button>
+            </div>
+            <div class="col-auto">
+                <button id="backBtn" class="btn btn-outline-secondary">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>Add Comment</h5>
+        <form id="commentForm">
+            <div class="mb-3">
+                <textarea
+                        id="commentText"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Add an internal note or update..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5>Comment History</h5>
+        <div id="commentsList" class="text-muted">No comments yet.</div>
+    </div>
+</div>

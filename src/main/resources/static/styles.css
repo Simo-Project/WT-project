@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table.dataTable {
+    width: 100% !important;
+}
+
+.brand-title,
+.brand-title:hover,
+.brand-title:focus,
+.brand-title:active,
+.brand-title:visited {
+    color: #002cff !important;
+    text-decoration: none;
+}
