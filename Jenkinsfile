@@ -31,6 +31,11 @@ tools {
    stage('Init') {
      steps {
        script {
+       echo "BRANCH_NAME=${env.BRANCH_NAME}"
+             echo "RUN_UI_TESTS=${params.RUN_UI_TESTS}"
+             echo "RUN_SONAR=${params.RUN_SONAR}"
+             echo "Build cause(s): ${currentBuild.getBuildCauses()}"
+
          if (isUnix()) {
 
            if (fileExists('mvnw')) {
