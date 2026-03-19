@@ -4,7 +4,6 @@ pipeline {
 tools {
   jdk 'JDK-23'
 }
-
   options {
     timestamps()
     disableConcurrentBuilds()
