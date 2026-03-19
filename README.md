@@ -68,7 +68,7 @@ src/test/
 ## Running the application
 
 ### Prerequisites
-- Java 21
+- Java 23
 - Maven 3.9+
 - MySQL 8+
 
@@ -228,7 +228,6 @@ Highlights:
 
 ## Future improvements
 
-- Add a Maven Wrapper (`mvnw`) for easier CI setup
 - Externalise database credentials through environment variables
 - Replace CDN-hosted frontend assets with local copies for more predictable CI/UI test execution
 - Expand role-based authorisation coverage and API documentation
