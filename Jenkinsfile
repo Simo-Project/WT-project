@@ -11,8 +11,8 @@ tools {
   }
 
   parameters {
-    booleanParam(name: 'RUN_UI_TESTS', defaultValue: false, description: 'Run Selenium UI tests (*SeleniumTest). Requires Chrome/Chromium on the agent.')
-    booleanParam(name: 'RUN_SONAR', defaultValue: false, description: 'Run SonarQube analysis (requires Jenkins SonarQube config).')
+    booleanParam(name: 'RUN_UI_TESTS', defaultValue: true, description: 'Run Selenium UI tests (*SeleniumTest). Requires Chrome/Chromium on the agent.')
+    booleanParam(name: 'RUN_SONAR', defaultValue: true, description: 'Run SonarQube analysis (requires Jenkins SonarQube config).')
     string(name: 'SONARQUBE_ENV', defaultValue: 'SonarQube', description: 'Name of SonarQube server in Jenkins (Manage Jenkins → System).')
   }
 
